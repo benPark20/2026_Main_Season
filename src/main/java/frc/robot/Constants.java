@@ -17,11 +17,11 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  public static class IntakeConstants{
+  public static class IntakeConstants {
 
     //TODO find actual motor IDs
-    public static final int rotationMotor = 0;
-    public static final int extenderMotor = 0;
+    public static final int ROTATION_MOTOR_ID = 0;
+    public static final int EXTENDER_MOTOR_ID = 0;
 
   }
 }

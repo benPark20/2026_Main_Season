@@ -15,8 +15,8 @@ public class RotateIntake extends Command {
   /** Creates a new RotateIntake. */
   public RotateIntake(Intake m_Intake, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_Intake=m_Intake;
-    this.speed=speed;
+    this.m_Intake = m_Intake;
+    this.speed = speed;
 
   }
 

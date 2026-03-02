@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
@@ -23,8 +24,8 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
 
-    extenderMotor = new TalonFX(0);
-    rotationMotor = new TalonFX(0);
+    extenderMotor = new TalonFX(Constants.IntakeConstants.EXTENDER_MOTOR_ID);
+    rotationMotor = new TalonFX(Constants.IntakeConstants.ROTATION_MOTOR_ID);
 
     active = false;
 
