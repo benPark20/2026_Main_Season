@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -67,8 +69,24 @@ public class DriveSubsystem extends SubsystemBase {
   //TODO add/fix Gyro
   private Pigeon2 m_gyro = new Pigeon2(0); //TODO find gyro Device ID
 
-  //TODO add odometry method after adding drivetrain kinematics to the Constants file
+  //TODO: add drivetrain kinematics to the Constants file
+  
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+      DriveConstants.kDriveKinematics,
+      m_gyro.getRotation2d(),
+      new SwerveModulePosition[] {
+          m_frontLeftModule.getSwerveModulePosition(),
+          m_frontRightModule.getSwerveModulePosition(),
+          m_backLeftModule.getSwerveModulePosition(),
+          m_backRightModule.getSwerveModulePosition()
+      });
 
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public Pose2d resetPose() {
+  }
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -79,6 +97,13 @@ public class DriveSubsystem extends SubsystemBase {
       // Handle exception as needed
       e.printStackTrace();
     }
+
+      /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+
 
     // Configure AutoBuilder last
     AutoBuilder.configure(

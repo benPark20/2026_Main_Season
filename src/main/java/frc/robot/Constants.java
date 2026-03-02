@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import frc.slicelibs.configs.CTREConfigs;
 
 /**
@@ -23,7 +26,17 @@ public final class Constants {
   }
 
   public static class DriveConstants {
+    // TODO: Chassis configuration
+    public static final double kTrackWidth = Units.inchesToMeters(23.729);
+    // TODO: Distance between centers of right and left wheels on robot
+    public static final double kWheelBase = Units.inchesToMeters(23.729);
 
+    //TODO: 
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+      new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
+      new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
+      new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // back right
+      new Translation2d(-kWheelBase / 2, kTrackWidth / 2));  //back left
 
     /* MOTOR IDS */
     // TODO Find Motor IDs
