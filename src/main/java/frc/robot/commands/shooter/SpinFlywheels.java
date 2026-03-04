@@ -29,7 +29,8 @@ public class SpinFlywheels extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mainShooter.spinFlywheels(angularSpeed);
+    mainShooter.spinFlywheels(-angularSpeed);
+
   }
 
   // Called once the command ends or is interrupted.
