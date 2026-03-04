@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.shooter.ManualShoot;
+import frc.robot.commands.shooter.ReadyShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
@@ -31,12 +32,16 @@ public class RobotContainer {
   public PS4Controller m_driverController = new PS4Controller(0);
 
   public Shooter m_Shooter = new Shooter();
+  public Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
   
   public ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
+  public ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
   public Shoot m_Shoot = new Shoot(m_Shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    preFire.onTrue(m_ReadyShooter);
+
     // Configure the trigger bindings
     configureBindings();
 

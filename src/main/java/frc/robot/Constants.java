@@ -78,6 +78,9 @@ public final class Constants {
     public static final double HUB_HEIGHT = 6; // Feet 
     public static final double HUB_HALF_LENGTH = 1.958335; // Feet    
 
+    // How long to speed up shooter before hub active
+    public static final double SPEED_SHOOTER_AT = 4; // Seconds
+
   }
 
 }

@@ -4,12 +4,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -64,7 +68,7 @@ public class Shooter extends SubsystemBase {
     VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
 
     leftShooterMotor.setControl(request.withVelocity(speed));
-    rightShooterMotor.setControl(request.withAcceleration(speed));
+    rightShooterMotor.setControl(request.withVelocity(speed));
 
   }
 
@@ -93,6 +97,132 @@ public class Shooter extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Determines if the hub is active (from WPILib website)
+   * @return Returns if the hub is active or not
+   */
+  public boolean isHubActive() {
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    // If we have no alliance, we cannot be enabled, therefore no hub.
+    if (alliance.isEmpty()) {
+      return false;
+    }
+    // Hub is always enabled in autonomous.
+    if (DriverStation.isAutonomousEnabled()) {
+      return true;
+    }
+    // At this point, if we're not teleop enabled, there is no hub.
+    if (!DriverStation.isTeleopEnabled()) {
+      return false;
+    }
+
+    // We're teleop enabled, compute.
+    double matchTime = DriverStation.getMatchTime();
+    String gameData = DriverStation.getGameSpecificMessage();
+    // If we have no game data, we cannot compute, assume hub is active, as its likely early in teleop.
+    if (gameData.isEmpty()) {
+      return true;
+    }
+    boolean redInactiveFirst = false;
+    switch (gameData.charAt(0)) {
+      case 'R' -> redInactiveFirst = true;
+      case 'B' -> redInactiveFirst = false;
+      default -> {
+        // If we have invalid game data, assume hub is active.
+        return true;
+      }
+    }
+
+    // Shift was is active for blue if red won auto, or red if blue won auto.
+    boolean shift1Active = switch (alliance.get()) {
+      case Red -> !redInactiveFirst;
+      case Blue -> redInactiveFirst;
+    };
+
+    if (matchTime > 130) {
+      // Transition shift, hub is active.
+      return true;
+    } else if (matchTime > 105) {
+      // Shift 1
+      return shift1Active;
+    } else if (matchTime > 80) {
+      // Shift 2
+      return !shift1Active;
+    } else if (matchTime > 55) {
+      // Shift 3
+      return shift1Active;
+    } else if (matchTime > 30) {
+      // Shift 4
+      return !shift1Active;
+    } else {
+      // End game, hub always active.
+      return true;
+    }
+  }
+
+  /**
+   * Determines if the hub is 4 seconds from active (from WPILib website)
+   * @return Returns if the hub is 4 seconds from active or not
+   */
+  public boolean isHubAlmostActive() {
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    // If we have no alliance, we cannot be enabled, therefore no hub.
+    if (alliance.isEmpty()) {
+      return false;
+    }
+    // Hub is always enabled in autonomous.
+    if (DriverStation.isAutonomousEnabled()) {
+      return true;
+    }
+    // At this point, if we're not teleop enabled, there is no hub.
+    if (!DriverStation.isTeleopEnabled()) {
+      return false;
+    }
+
+    // We're teleop enabled, compute.
+    double matchTime = DriverStation.getMatchTime();
+    String gameData = DriverStation.getGameSpecificMessage();
+    // If we have no game data, we cannot compute, assume hub is active, as its likely early in teleop.
+    if (gameData.isEmpty()) {
+      return true;
+    }
+    boolean redInactiveFirst = false;
+    switch (gameData.charAt(0)) {
+      case 'R' -> redInactiveFirst = true;
+      case 'B' -> redInactiveFirst = false;
+      default -> {
+        // If we have invalid game data, assume hub is active.
+        return true;
+      }
+    }
+
+    // Shift was is active for blue if red won auto, or red if blue won auto.
+    boolean shift1Active = switch (alliance.get()) {
+      case Red -> !redInactiveFirst;
+      case Blue -> redInactiveFirst;
+    };
+
+    if (matchTime > (130 - Constants.FieldConstants.SPEED_SHOOTER_AT)) {
+      // Transition shift, hub is active.
+      return true;
+    } else if (matchTime > (105 - Constants.FieldConstants.SPEED_SHOOTER_AT)) {
+      // Shift 1
+      return shift1Active;
+    } else if (matchTime > (80 - Constants.FieldConstants.SPEED_SHOOTER_AT)) {
+      // Shift 2
+      return !shift1Active;
+    } else if (matchTime > (55 - Constants.FieldConstants.SPEED_SHOOTER_AT)) {
+      // Shift 3
+      return shift1Active;
+    } else if (matchTime > (30 - Constants.FieldConstants.SPEED_SHOOTER_AT)) {
+      // Shift 4
+      return !shift1Active;
+    } else {
+      // End game, hub always active.
+      return true;
+    }
   }
 
   @Override
