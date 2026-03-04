@@ -114,9 +114,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
   public void setDutyCycle (double DrivePercent, double RotationPercent) {
     m_backRightModule.setDutyCycle(DrivePercent, RotationPercent);
-   // m_backLeftModule.setDutyCycle(DrivePercent, RotationPercent);
-   // m_frontRightModule.setDutyCycle(DrivePercent, RotationPercent);
-   // m_frontLeftModule.setDutyCycle(DrivePercent, RotationPercent);
+    m_backLeftModule.setDutyCycle(DrivePercent, RotationPercent);
+    m_frontRightModule.setDutyCycle(DrivePercent, RotationPercent);
+    m_frontLeftModule.setDutyCycle(DrivePercent, RotationPercent);
 
   }
 

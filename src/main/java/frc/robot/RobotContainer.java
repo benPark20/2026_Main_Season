@@ -12,6 +12,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,7 +29,7 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
 
   // The robot's subsystems and commands are defined here...
@@ -42,15 +43,15 @@ public class RobotContainer {
    m_robotDrive.setDefaultCommand(
     //     // The left stick controls translation of the robot.
     //     // Turning is controlled by the X axis of the right stick.
-         new RunCommand(  
-           () -> m_robotDrive.drive(
-              MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
-               MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
-              MathUtil.applyDeadband(m_driverController.getRawAxis(5), OIConstants.kDriveDeadband), //rotation
-               false),
-           m_robotDrive)); 
+          new RunCommand(  
+            () -> m_robotDrive.drive(
+               MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
+                MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
+               MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband), //rotation
+                false),
+            m_robotDrive)); 
 
-  //  new RunCommand( () -> m_robotDrive.setDutyCycle(.1,.1),
+  //new RunCommand( () -> m_robotDrive.setDutyCycle(0,.1),
   //    m_robotDrive));
   }
 

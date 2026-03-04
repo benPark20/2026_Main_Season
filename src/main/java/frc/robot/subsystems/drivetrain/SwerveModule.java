@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,35 +30,41 @@ public class SwerveModule {
     private TalonFX turningMotor;
 
     private AnalogEncoder rotationAnalogEncoder;
+  //  private AnalogInput rotation;
     private Encoder integratedEncoder;
 
     private double chassisAngularOffset;
     private Rotation2d angularOffset;
+    private boolean inverted;
 
 
     private SwerveModuleState desiredState = new SwerveModuleState(0, new Rotation2d());
 
-    public SwerveModule(int modNum, int driveCanID, int turnCanId,int encoderId, double chassisOffset, Rotation2d offset ){
+    public SwerveModule(int modNum, int driveCanID, int turnCanId,int encoderId, double chassisOffset, Rotation2d offset){
         module_number = modNum;
         this.driveCanID = driveCanID;
         this.turnCanId = turnCanId;
         angularOffset = offset;
-
         drivingMotor = new TalonFX(driveCanID);
         turningMotor = new TalonFX(turnCanId);
+        inverted = false;
+
+      //  rotation  = new AnalogInput(encoderId);
 
         drivingMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.m_swerveDriveConfigs);
         turningMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.m_swerveTurnConfigs);
-        
+
         rotationAnalogEncoder = new AnalogEncoder(encoderId, 360, 0); //TODO get channel
-        
+        rotationAnalogEncoder.setInverted(inverted);
         // rotationAnalogEncoder = new AnalogEncoder(encoderId);
         //turningMotor.setPosition(Math.abs(rotationAnalogEncoder.get() - (angularOffset.getDegrees())));
         //turningMotor.setPosition(turningMotor.getPosition().getValueAsDouble() - angularOffset.getDegrees());
 
-        PositionVoltage initial = new PositionVoltage(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees());
+        turningMotor.setPosition(rotationAnalogEncoder.get());
+        //PositionVoltage initial = new PositionVoltage(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees());
 
-        turningMotor.setControl(initial.withPosition(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees()));
+        // turningMotor.setControl(initial.withPosition(Math.abs(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees())));
+        turningMotor.setControl(new PositionVoltage(desiredState.angle.getRotations()));
     
         desiredState.angle = Rotation2d.fromRotations(rotationAnalogEncoder.get());
 
@@ -93,6 +100,7 @@ public class SwerveModule {
 
         turningMotor.setControl(positionRequest.withPosition(correctedDesiredState.angle.getRotations()));
 
+        // turningMotor.setControl(new PositionVoltage(desiredState.angle.getRotations()));
         //SmartDashboard.putNumber("Driving Encoder " + driveCanID, (rotationAnalogEncoder.get());
         
 
@@ -107,6 +115,10 @@ public class SwerveModule {
     public double getANYTHING(){
         return (Math.abs(rotationAnalogEncoder.get() - (angularOffset.getDegrees())));
     }
+
+  //  public double getPosition() {
+    //    double b = (inverted ? -1.0 : 1.0) * ((rotationAnalogEncoder.get()))
+    //}
     
     // TODO : add a RESET ENCODERS METHOD
 
