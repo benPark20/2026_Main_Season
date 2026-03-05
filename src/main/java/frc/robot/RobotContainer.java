@@ -7,7 +7,14 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.shooter.ManualShoot;
+import frc.robot.commands.shooter.ReadyShooter;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,17 +26,27 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  public PS4Controller m_driverController = new PS4Controller(0);
+
+  public Shooter m_Shooter = new Shooter();
+  public Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
+  
+  public ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
+  public ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
+  public Shoot m_Shoot = new Shoot(m_Shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    preFire.onTrue(m_ReadyShooter);
+
     // Configure the trigger bindings
     configureBindings();
+
+    //m_Shooter.setDefaultCommand(m_Shoot);
+
   }
 
   /**
@@ -42,13 +59,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    frc.robot.Button.leftTrigger1.whileTrue(m_Shoot);
+    
   }
 
   /**
@@ -58,6 +70,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // TODO: get actual automomous command to return
+    return null;
   }
 }
