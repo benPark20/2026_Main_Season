@@ -106,4 +106,11 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
   }
 
+  public static class IntakeConstants {
+
+    //TODO find actual motor IDs
+    public static final int ROTATION_MOTOR_ID = 0;
+    public static final int EXTENDER_MOTOR_ID = 0;
+
+  }
 }

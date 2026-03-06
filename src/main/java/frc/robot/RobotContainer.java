@@ -11,12 +11,17 @@ import frc.robot.commands.Indexer.SpinStageOne;
 import frc.robot.commands.Indexer.SpinStageOneManual;
 import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.commands.Indexer.SpinStageTwoManual;
+import frc.robot.commands.Intake.MoveIntakeManual;
+import frc.robot.commands.Intake.RotateIntake;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.drivetrain.DriveSubsystem;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.drivetrain.DriveSubsystem;
+
+import java.util.function.ObjIntConsumer;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,10 +35,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // The robot's subsystems and commands are defined here...
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
+  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private final Intake m_Intake =  new Intake();
+
+  private final MoveIntakeManual m_MoveIntakeManual = new MoveIntakeManual(m_Intake, m_driverController.getRawAxis(5));
+  private final RotateIntake m_RotateIntakeManual = new RotateIntake(m_Intake, m_driverController.getRawAxis(6));
   DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 7);
 
@@ -48,6 +61,8 @@ public class RobotContainer {
   public RobotContainer() {
       // Configure the button bindings
     configureBindings();
+
+    m_Intake.setDefaultCommand(m_MoveIntakeManual); //TODO change default command for testing purposes
 
     // Configure default commands
    m_robotDrive.setDefaultCommand(
