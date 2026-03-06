@@ -13,5 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class Button {
     public static PS4Controller controller1 = new PS4Controller(0);
 
-    public static Trigger leftTrigger1 = new JoystickButton(controller1, 2);
+    public static Trigger leftTriggerDriver = new JoystickButton(controller1, 2);
+    public static Trigger rightTriggerDriver = new JoystickButton(controller1, 8);
 }

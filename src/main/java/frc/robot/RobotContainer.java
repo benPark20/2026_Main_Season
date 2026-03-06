@@ -59,7 +59,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    frc.robot.Button.leftTrigger1.whileTrue(m_Shoot);
+    frc.robot.Button.rightTriggerDriver.whileTrue(m_Shoot);
     
   }
 
