@@ -82,7 +82,7 @@ public class ShooterCalculations {
     }
 
     public static double distanceToHub(){
-        PoseEstimate robotPose;
+        /*PoseEstimate robotPose;
         double[] hubXY = new double[2];
         if (DriverStation.getAlliance().get() == Alliance.Blue){
             robotPose = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
@@ -101,6 +101,17 @@ public class ShooterCalculations {
         double distance = Math.sqrt(Math.pow((robotXY[0] - hubXY[0]), 2) + Math.pow((robotXY[1] - hubXY[1]), 2)); // Pythagorean theorem to get distance
         System.out.println("DISTANCE TO HUB: " + distance);
         //double distance = robotPose.avgTagDist + Constants.FieldConstants.HUB_HALF_LENGTH; // Get the distance to the tag plus the hub's length
+        return distance;*/
+
+        double distance = 0;
+        if (!LimelightHelpers.getTV("limelight-right")){
+            return distance;
+        }
+        double offsetAngleVertical = LimelightHelpers.getTY("limelight-right");
+        double angleToGoal = Math.toRadians(Constants.ShooterConstants.LIMELIGHT_ANGLE + offsetAngleVertical);
+
+        distance = (Constants.FieldConstants.HUB_APRILTAG_HEIGHT - Constants.ShooterConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoal);
+        
         return distance;
     }
 

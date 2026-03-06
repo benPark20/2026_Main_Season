@@ -138,6 +138,8 @@ public final class Constants {
     // Robot dimensions
     public static final double SHOOTER_HEIGHT = 1.7891; // Feet
     public static final double FLYWHEEL_RADIUS = 0.1667; // Feet
+    public static final double LIMELIGHT_ANGLE = 25; // TODO: Fill in degrees
+    public static final double LIMELIGHT_HEIGHT = 1.5; // TODO: Fill in feet
 
     // Maximums and minimums (Tune these)
     public static final double MAX_FLYWHEEL_VELOCITY = 35; // Feet per second
@@ -150,7 +152,7 @@ public final class Constants {
     public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
     public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
-
+    
     // Optimization for Maths (Tune these)
     public static final double SHOOTER_STEP = 0.1;
     public static final int SHOOTER_DIE_TIME = 1000000; // Maximum number of optimizations allowed
@@ -158,13 +160,14 @@ public final class Constants {
   }
 
   public static class FieldConstants {
-    public static final Translation2d BLUE_HUB = new Translation2d(4.62534, 4.03479); // TODO: Check the hubs (in metres)
-    public static final Translation2d RED_HUB = new Translation2d(11.91514, 4.03479);
+    /*public static final Translation2d BLUE_HUB = new Translation2d(4.62534, 4.03479); // TODO: Check the hubs (in metres)
+    public static final Translation2d RED_HUB = new Translation2d(11.91514, 4.03479);*/
     public static final double GRAVITY = 32.185; // Feet per second per second
 
     // Height and length of the hub
     public static final double HUB_HEIGHT = 6.4; // Feet 
-    public static final double HUB_HALF_LENGTH = 1.958335; // Feet    
+    public static final double HUB_HALF_LENGTH = 1.958335; // Feet  
+    public static final double HUB_APRILTAG_HEIGHT = Units.inchesToMeters(44.25); // inches  
 
     // How long to speed up shooter before hub active
     public static final double SPEED_SHOOTER_AT = 4; // Seconds
