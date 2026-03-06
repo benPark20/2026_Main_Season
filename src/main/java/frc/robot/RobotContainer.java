@@ -26,11 +26,13 @@ import java.util.function.ObjIntConsumer;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -61,6 +63,7 @@ public class RobotContainer {
   private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
   private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
   private final Shoot m_Shoot = new Shoot(m_Shooter);
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // The driver's controller
 
@@ -68,18 +71,18 @@ public class RobotContainer {
   Trigger m_ResetGyro = new JoystickButton(m_driverController, 7);
   Trigger m_TestIntakeRotation = new JoystickButton(m_driverController, 1);
 
-
   private final Indexer m_Indexer = new Indexer();
   
   // TODO : POSITIVE IS CORRECT WAY
   private final SpinStageOneManual m_IndexerStageOneManual = new SpinStageOneManual(m_Indexer, m_driverController);
   private final SpinStageTwoManual m_IndexerStageTwoManual = new SpinStageTwoManual(m_Indexer, m_driverController); // TODO change axis
 
+  Command autoCommand = new ParallelCommandGroup(m_Shoot, m_IndexerStageTwoManual);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
     preFire.onTrue(m_ReadyShooter);
-
+    m_chooser.setDefaultOption("Simple Auto", autoCommand);
     m_ResetGyro.onTrue(new RunCommand(() -> m_robotDrive.resetGyro(), m_robotDrive));
 
     
@@ -124,7 +127,7 @@ public class RobotContainer {
   private void configureBindings() {
     frc.robot.Button.rightTriggerDriver.whileTrue(m_Shoot);
 
-    
+    m_chooser.getSelected();
   }
 
   /**
