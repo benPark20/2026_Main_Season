@@ -109,8 +109,8 @@ public final class Constants {
   public static class IntakeConstants {
 
     //TODO find actual motor IDs
-    public static final int ROTATION_MOTOR_ID = 0;
-    public static final int EXTENDER_MOTOR_ID = 0;
+    public static final int ROTATION_MOTOR_ID = 6;
+    public static final int EXTENDER_MOTOR_ID = 5;
 
   }
 }

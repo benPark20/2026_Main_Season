@@ -9,36 +9,36 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MoveIntakeManual extends Command {
-
-  private Intake m_intake;
+public class RotateIntakeManual extends Command {
+  private Intake m_Intake;
   private XboxController m_Controller;
 
-  /** Creates a new MoveIntakeManual. */
-  public MoveIntakeManual(Intake intake, XboxController controller) {
-    m_intake = intake;
-    m_Controller = controller;
+  /** Creates a new RotateIntake. */
+  public RotateIntakeManual(Intake m_Intake, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    this.m_Intake = m_Intake;
+    m_Controller = controller;
+    addRequirements(m_Intake);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.setActive(true);
+    m_Intake.setActive(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.moveExtendMotor(m_Controller.getRawAxis(5));
+    m_Intake.moveRotationMotor(m_Controller.getRawAxis(5));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.moveExtendMotor(0);
-    m_intake.setActive(false);
+    m_Intake.moveRotationMotor(0);
+    m_Intake.setActive(false);
   }
 
   // Returns true when the command should end.

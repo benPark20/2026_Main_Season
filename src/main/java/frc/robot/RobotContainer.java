@@ -13,6 +13,7 @@ import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.commands.Indexer.SpinStageTwoManual;
 import frc.robot.commands.Intake.MoveIntakeManual;
 import frc.robot.commands.Intake.RotateIntake;
+import frc.robot.commands.Intake.RotateIntakeManual;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -42,13 +43,15 @@ public class RobotContainer {
 
   private final Intake m_Intake =  new Intake();
 
-  private final MoveIntakeManual m_MoveIntakeManual = new MoveIntakeManual(m_Intake, m_driverController.getRawAxis(5));
-  private final RotateIntake m_RotateIntakeManual = new RotateIntake(m_Intake, m_driverController.getRawAxis(6));
+  private final MoveIntakeManual m_MoveIntakeManual = new MoveIntakeManual(m_Intake, m_driverController);
+  private final RotateIntake m_RotateIntakeManual = new RotateIntake(m_Intake, 0.25);
+  
   DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
 
-  Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 7);
+  Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 8);
+  Trigger m_TestIntakeRotation = new JoystickButton(m_driverController, 1);
 
 
   private final Indexer m_Indexer = new Indexer();
@@ -61,8 +64,6 @@ public class RobotContainer {
   public RobotContainer() {
       // Configure the button bindings
     configureBindings();
-
-    m_Intake.setDefaultCommand(m_MoveIntakeManual); //TODO change default command for testing purposes
 
     // Configure default commands
    m_robotDrive.setDefaultCommand(
@@ -93,7 +94,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_Indexer.setDefaultCommand(m_IndexerStageOneManual); //TODO change to stage two for manual testing
+    //m_Indexer.setDefaultCommand(m_IndexerStageOneManual); //TODO change to stage two for manual testing
+    m_Intake.setDefaultCommand(m_MoveIntakeManual); //TODO change default command for testing purposes
+
+    m_TestIntakeRotation.whileTrue(m_RotateIntakeManual);
     
   }
 
