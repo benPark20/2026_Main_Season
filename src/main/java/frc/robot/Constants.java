@@ -4,17 +4,11 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
-=======
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
->>>>>>> Shooter
 import frc.slicelibs.configs.CTREConfigs;
 
 /**
@@ -32,44 +26,6 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-<<<<<<< HEAD
-
-  public static class DriveConstants {
-    // TODO: Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(23.729);
-    // TODO: Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.729);
-
-    //TODO: 
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-      new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
-      new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
-      new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // back right
-      new Translation2d(-kWheelBase / 2, kTrackWidth / 2));  //back left
-
-    /* MOTOR IDS */
-    // TODO Find Motor IDs
-    public static final int FRONT_LEFT_DRIVE_ID = 0;
-    public static final int FRONT_RIGHT_DRIVE_ID = 0;
-    public static final int BACK_LEFT_DRIVE_ID = 0;
-    public static final int BACK_RIGHT_DRIVE_ID = 0;
-
-    public static final int FRONT_LEFT_TURN_ID = 0;
-    public static final int FRONT_RIGHT_TURN_ID = 0;
-    public static final int BACK_LEFT_TURN_ID = 0;
-    public static final int BACK_RIGHT_TURN_ID = 0;
-
-
-    //TODO: Figure out PIDs for both Drive Motors and Turn Motors
-    public static final double DRIVE_KP = 0;
-    public static final double DRIVE_KI = 0;
-    public static final double DRIVE_KD = 0;
-
-    public static final double TURN_KP = 0;
-    public static final double TURN_KI = 0;
-    public static final double TURN_KD = 0;
-    
-=======
   
   public static class ShooterConstants {
     
@@ -124,7 +80,6 @@ public final class Constants {
 
     // How long to speed up shooter before hub active
     public static final double SPEED_SHOOTER_AT = 4; // Seconds
->>>>>>> Shooter
 
   }
 

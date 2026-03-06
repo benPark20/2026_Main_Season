@@ -15,9 +15,14 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.StadiaController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,15 +42,24 @@ public class RobotContainer {
   public ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
   public ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
   public Shoot m_Shoot = new Shoot(m_Shooter);
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     preFire.onTrue(m_ReadyShooter);
+    // In RobotContainer.java (in the constructor or a setup method)
+    m_chooser.setDefaultOption("Simple Auto", m_Shoot);
 
     // Configure the trigger bindings
     configureBindings();
+    // In RobotContainer.java
+
 
     //m_Shooter.setDefaultCommand(m_Shoot);
+   // NamedCommands.registerCommand("Shooter", m_Shoot);
+   // chooser.addOption("Auto Name", new PathPlannerAuto("Auto Name"));
+   // SmartDashboard.putData("Auto Mode", chooser);
 
   }
 
@@ -71,6 +85,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // TODO: get actual automomous command to return
-    return null;
+    //     return null;
+      return m_chooser.getSelected();
   }
 }
