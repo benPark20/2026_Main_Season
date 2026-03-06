@@ -22,8 +22,10 @@ public final class Constants {
 
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
 
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+  public static class IndexerConstants {
+    //TODO get motor IDs
+    public static final int STAGE_ONE_MOTOR_ID = 18;
+    public static final int STAGE_TWO_MOTOR_ID = 1;
   }
 
   public static class DriveConstants {

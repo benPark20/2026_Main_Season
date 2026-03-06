@@ -5,14 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Indexer.SpinStageOne;
+import frc.robot.commands.Indexer.SpinStageOneManual;
+import frc.robot.commands.Indexer.SpinStageTwo;
+import frc.robot.commands.Indexer.SpinStageTwoManual;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.Indexer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,9 +38,13 @@ public class RobotContainer {
   Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 7);
 
 
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Indexer m_Indexer = new Indexer();
+  
+  // TODO : POSITIVE IS CORRECT WAY
+  private final SpinStageOneManual m_IndexerStageOneManual = new SpinStageOneManual(m_Indexer, m_driverController);
+  private final SpinStageTwoManual m_IndexerStageTwoManual = new SpinStageTwoManual(m_Indexer, m_driverController); // TODO change axis
 
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
       // Configure the button bindings
     configureBindings();
@@ -51,7 +59,7 @@ public class RobotContainer {
               MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
               MathUtil.applyDeadband(m_driverController.getRawAxis(4), OIConstants.kDriveDeadband), //rotation
                 true),
-            m_robotDrive)); 
+            m_robotDrive));
 
 
             
@@ -70,16 +78,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-    m_ResetEncoderFieldRelative.onTrue(new RunCommand(() -> m_robotDrive.resetEncoders(), m_robotDrive));
+    m_Indexer.setDefaultCommand(m_IndexerStageOneManual); //TODO change to stage two for manual testing
+    
   }
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-  //  m_driverController.kb().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    // Configure the button bindings
-
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
