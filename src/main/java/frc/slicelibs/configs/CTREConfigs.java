@@ -33,6 +33,10 @@ public class CTREConfigs {
         swerveDrivePIDs.kI = Constants.DriveConstants.DRIVE_KI;
         swerveDrivePIDs.kD = Constants.DriveConstants.DRIVE_KD;
 
+        var swerveDriveCurrent = m_swerveDriveConfigs.CurrentLimits;
+        swerveDriveCurrent.StatorCurrentLimit = 60;
+        swerveDriveCurrent.SupplyCurrentLimit = 40;
+
 
         //////////////////////////
         /// Swerve Turn Configs //
@@ -42,6 +46,10 @@ public class CTREConfigs {
         swerveTurnPIDs.kP = Constants.DriveConstants.TURN_KP;
         swerveTurnPIDs.kI = Constants.DriveConstants.TURN_KI;
         swerveTurnPIDs.kD = Constants.DriveConstants.TURN_KD;
+
+        var swerveTurnCurrent = m_swerveTurnConfigs.CurrentLimits;
+        swerveTurnCurrent.StatorCurrentLimit = 40;
+        swerveTurnCurrent.SupplyCurrentLimit = 30;
 
         m_swerveTurnConfigs.Feedback.SensorToMechanismRatio = Constants.DriveConstants.ANGLE_GEAR_RATIO;
         //m_swerveTurnConfigs.ClosedLoopGeneral.ContinuousWrap = true;

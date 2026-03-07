@@ -139,8 +139,8 @@ public final class Constants {
     // Robot dimensions
     public static final double SHOOTER_HEIGHT = 1.7891; // Feet
     public static final double FLYWHEEL_RADIUS = 0.1667; // Feet
-    public static final double LIMELIGHT_ANGLE = 25; // TODO: Fill in degrees
-    public static final double LIMELIGHT_HEIGHT = 1.5; // TODO: Fill in feet
+    public static final double LIMELIGHT_ANGLE = 72.5; // TODO: Fill in degrees
+    public static final double LIMELIGHT_HEIGHT = 1.525; // TODO: Fill in feet
 
     // Maximums and minimums (Tune these)
     public static final double MAX_FLYWHEEL_VELOCITY = 35; // Feet per second

@@ -11,6 +11,7 @@ import frc.robot.commands.Indexer.SpinStageOne;
 import frc.robot.commands.Indexer.SpinStageOneManual;
 import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.commands.Indexer.SpinStageTwoManual;
+import frc.robot.commands.Intake.IntakeFuel;
 import frc.robot.commands.Intake.MoveIntakeManual;
 import frc.robot.commands.Intake.RotateIntake;
 import frc.robot.commands.Intake.RotateIntakeManual;
@@ -46,31 +47,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+  /*  Controllers */
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  /* Drive Subsystem */
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  /*  Intake Subsystem & Commands */
   private final Intake m_Intake =  new Intake();
 
   private final MoveIntakeManual m_MoveIntakeManual = new MoveIntakeManual(m_Intake, m_driverController);
   private final RotateIntake m_RotateIntakeManual = new RotateIntake(m_Intake, 0.25);
-  
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  private final Shooter m_Shooter = new Shooter();
-
-  private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
-  private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
-  private final Shoot m_Shoot = new Shoot(m_Shooter);
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-  // The driver's controller
-
-  Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 8);
- // Trigger m_ResetGyro = new JoystickButton(m_driverController, 7);
-  Trigger m_TestIntakeRotation = new JoystickButton(m_driverController, 1);
+  /* Indexer Subsystem & Commands */
 
   private final Indexer m_Indexer = new Indexer();
   
@@ -80,9 +70,33 @@ public class RobotContainer {
   private final SpinStageOne m_spinStageOne = new SpinStageOne(m_Indexer, 0.2); // TODO: Set correct speed
   private final SpinStageTwo m_spinStageTwo = new SpinStageTwo(m_Indexer, 0.2); // TODO: Set correct speed
 
+  /* Shooter Subsystem & Commands */
+
+  private final Shooter m_Shooter = new Shooter();
+
+  private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
+  private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
+  private final Shoot m_Shoot = new Shoot(m_Shooter);
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+
+  /*
+   * TODO move these triggers to the Buttons class
+  Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 8);
+  Trigger m_ResetGyro = new JoystickButton(m_driverController, 7);
+  Trigger m_TestIntakeRotation = new JoystickButton(m_driverController, 1);
+  */
+  
+  /* Sequence & Parallel Commands */
+  private final IntakeFuel m_IntakeFuel = new IntakeFuel(m_Intake, m_Indexer);
+
   private final ShootAndIndex m_shootAndIndex = new ShootAndIndex(m_Shoot, m_spinStageTwo);
 
+  /* Autos */
   Command autoCommand = new ParallelCommandGroup(m_Shoot, m_IndexerStageTwoManual);
+
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
@@ -105,7 +119,8 @@ public class RobotContainer {
               MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
               MathUtil.applyDeadband(m_driverController.getRawAxis(4), OIConstants.kDriveDeadband), //rotation
                 false),
-            m_robotDrive));
+            m_robotDrive)
+  );
 
       
           
@@ -116,7 +131,7 @@ public class RobotContainer {
   //new RunCommand( () -> m_robotDrive.setDutyCycle(0,.1),
   //    m_robotDrive));
 
-    //m_Shooter.setDefaultCommand(m_Shoot);
+  //m_Shooter.setDefaultCommand(m_Shoot);
 
   }
 
@@ -130,7 +145,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    frc.robot.Button.rightTriggerDriver.whileTrue(m_Shoot);
+
+    Buttons.controller1_leftBumper.whileTrue(m_IntakeFuel);
+    Buttons.controller1_RightTrigger.whileTrue(m_Shoot);
+
+    
     m_chooser.getSelected();
   }
 
@@ -139,9 +158,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-//  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // TODO: get actual automomous command to return
-  //  return null;
- // }
+    // TODO: improve autos
+    return autoCommand;
+  }
 }
