@@ -103,14 +103,39 @@ public class ShooterCalculations {
         //double distance = robotPose.avgTagDist + Constants.FieldConstants.HUB_HALF_LENGTH; // Get the distance to the tag plus the hub's length
         return distance;*/
 
-        double distance = 0;
-        if (!LimelightHelpers.getTV("limelight-right")){
-            return distance;
-        }
-        double offsetAngleVertical = LimelightHelpers.getTY("limelight-right");
-        double angleToGoal = Math.toRadians(Constants.ShooterConstants.LIMELIGHT_ANGLE + offsetAngleVertical);
+        // double distance = 0;
+        // if (!LimelightHelpers.getTV("limelight-right")){
+        //     return distance;
+        // }
+        // double offsetAngleVertical = LimelightHelpers.getTY("limelight-right");
+        // double angleToGoal = Math.toRadians(Constants.ShooterConstants.LIMELIGHT_ANGLE + offsetAngleVertical);
 
-        distance = (Constants.FieldConstants.HUB_APRILTAG_HEIGHT - Constants.ShooterConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoal);
+        // distance = (Constants.FieldConstants.HUB_APRILTAG_HEIGHT - Constants.ShooterConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoal);
+        
+        // return distance;
+        double distance = 0;
+        if (!LimelightHelpers.getTV("limelight")) {
+        return distance; // Return the last calculated distance if target is lost
+    }
+
+        //Get the vertical offset (ty) from LimelightHelpers
+        double targetOffsetAngle_Vertical = LimelightHelpers.getTY("limelight");
+
+        //Get constants from the Constants file
+        double limelightMountAngleDegrees = Constants.ShooterConstants.AngleOfLimeLight; 
+        double limelightLensHeightInches = Constants.ShooterConstants.heightOfLimeLight; 
+        double goalHeightInches = Constants.ShooterConstants.heightofAprilTag * 39.37; // convert meters to inches
+
+        //Calculate the total angle to the target
+        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+        double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+
+        //Calculate horizontal distance (X)
+        // Formula: (TargetHeight - CameraHeight) / tan(TotalAngle)
+        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+
+        //Update the global distance variable (converted to meters)
+        distance = distanceFromLimelightToGoalInches / 39.37; 
         
         return distance;
     }
