@@ -124,7 +124,7 @@ public class ShooterCalculations {
         //Get constants from the Constants file
         double limelightMountAngleDegrees = Constants.ShooterConstants.LIMELIGHT_ANGLE; 
         double limelightLensHeightInches = Constants.ShooterConstants.LIMELIGHT_HEIGHT; 
-        double goalHeightInches = Constants.ShooterConstants.HUB_APRILTAG_HEIGHT * 39.37; // convert meters to inches
+        double goalHeightInches = Constants.FieldConstants.HUB_HEIGHT * 39.37; // convert meters to inches
 
         //Calculate the total angle to the target
         double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;

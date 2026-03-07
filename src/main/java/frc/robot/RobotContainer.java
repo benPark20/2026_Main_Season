@@ -49,7 +49,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   /*  Controllers */
-  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController m_driverController = Buttons.controller1;
+  //private final XboxController m_operatorController = Buttons.controller2;
 
   /* Drive Subsystem */
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -84,7 +85,6 @@ public class RobotContainer {
    * TODO move these triggers to the Buttons class
   Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 8);
   Trigger m_ResetGyro = new JoystickButton(m_driverController, 7);
-  Trigger m_TestIntakeRotation = new JoystickButton(m_driverController, 1);
   */
   
   /* Sequence & Parallel Commands */
@@ -148,6 +148,8 @@ public class RobotContainer {
 
     Buttons.controller1_leftBumper.whileTrue(m_IntakeFuel);
     Buttons.controller1_RightTrigger.whileTrue(m_Shoot);
+
+    Buttons.controller1_minusButton.onTrue(new RunCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
 
     
     m_chooser.getSelected();
