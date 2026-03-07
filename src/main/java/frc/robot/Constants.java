@@ -156,7 +156,7 @@ public final class Constants {
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
     
     // Optimization for Maths (Tune these)
-    public static final double SHOOTER_STEP = 0.1;
+    public static final double SHOOTER_STEP = 0.2;
     public static final int SHOOTER_DIE_TIME = 100000; // Maximum number of optimizations allowed
     public static final double H = 0.0000001;
   }
