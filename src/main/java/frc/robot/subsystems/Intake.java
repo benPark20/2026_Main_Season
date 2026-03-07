@@ -8,6 +8,8 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -86,10 +88,15 @@ public class Intake extends SubsystemBase {
 
     rotationMotor.setControl(request.withVelocity(speed));
   }
+  
+  public double getExtenderPosition(){
+    return extenderMotor.getPosition().getValueAsDouble();
+  }
 
   
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Intake extender position: ", getExtenderPosition());
     // This method will be called once per scheduler run
   }
 }

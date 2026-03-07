@@ -12,11 +12,11 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SpinFlywheels extends Command {
   private Shooter mainShooter;
-  private double angularSpeed;
+  // private double angularSpeed;
   /** Creates a new SpinFlywheels. */
-  public SpinFlywheels(Shooter m_shooter, double linearSpeed) {
+  public SpinFlywheels(Shooter m_shooter) {
     mainShooter = m_shooter;
-    angularSpeed = linearSpeed / Constants.ShooterConstants.FLYWHEEL_RADIUS;
+    // angularSpeed = linearSpeed / Constants.ShooterConstants.FLYWHEEL_RADIUS;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter);
   }
@@ -34,12 +34,11 @@ public class SpinFlywheels extends Command {
     double distance = ShooterCalculations.distanceToHub();
     try {
       result = ShooterCalculations.calculateShooterTrajectory(distance);
+      mainShooter.spinFlywheels(result[1] / Constants.ShooterConstants.FLYWHEEL_RADIUS);
     } catch (IndexOutOfBoundsException e) {
       result[0] = 0;
       result[1] = 0;
     }
-    mainShooter.spinFlywheels(-result[1]);
-
   }
 
   // Called once the command ends or is interrupted.

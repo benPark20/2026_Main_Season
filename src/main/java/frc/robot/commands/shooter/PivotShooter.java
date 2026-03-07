@@ -4,39 +4,42 @@
 
 package frc.robot.commands.shooter;
 
+import java.io.Console;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.ShooterCalculations;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class PivotShooter extends Command {
   private Shooter mainShooter;
-  private double rotations;
+  // private double rotations;
   /** Creates a new PivotShooter. */
-  public PivotShooter(Shooter m_shooter, double targetAngle) {
+  public PivotShooter(Shooter m_shooter) {
     mainShooter = m_shooter;
-    rotations = targetAngle * 2 * Math.PI;
+    // rotations = targetAngle * 2 * Math.PI;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    double[] result = new double[2];
-    double distance = ShooterCalculations.distanceToHub();
-    try {
-      result = ShooterCalculations.calculateShooterTrajectory(distance);
-    } catch (IndexOutOfBoundsException e) {
-      result[0] = 0;
-      result[1] = 0;
-    }
-    mainShooter.pivotShooterToPosition(result[0] * 2 * Math.PI);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double[] result = new double[2];
+    double distance = ShooterCalculations.distanceToHub();
+    try {
+      result = ShooterCalculations.calculateShooterTrajectory(distance);
+      mainShooter.pivotShooterToPosition(result[0] * 2 * Math.PI);
+    } catch (IndexOutOfBoundsException e) {
+      result[0] = Constants.ShooterConstants.MIN_SHOOTER_ANGLE;
+      result[1] = 0;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
