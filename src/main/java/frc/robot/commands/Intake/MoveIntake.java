@@ -28,18 +28,27 @@ public class MoveIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    /* TODO finish this logic 
+    if(m_Intake.getExtenderPosition() >= ()){
+      m_Intake.moveExtendMotor(0);
+    }
+    */
     m_Intake.moveIntakeToPosition(targetPosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_Intake.moveIntakeToPosition(0);
     m_Intake.setActive(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(m_Intake.getExtenderPosition() >= targetPosition - 0.5){
+      return true;//m_Intake.moveExtendMotor(0);
+    }
     return false;
   }
 

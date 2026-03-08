@@ -7,6 +7,7 @@ package frc.slicelibs.configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.robot.Constants;
 
 
@@ -19,6 +20,8 @@ public class CTREConfigs {
 
     public final TalonFXConfiguration shooterConfigs = new TalonFXConfiguration();
     public final TalonFXConfiguration shooterRightConfigs = new TalonFXConfiguration();
+
+    public final TalonFXConfiguration m_intakeConfigs = new TalonFXConfiguration();
 
 
     public CTREConfigs(){
@@ -56,7 +59,7 @@ public class CTREConfigs {
 
 
         m_swerveTurnConfigs.Feedback.SensorToMechanismRatio = Constants.DriveConstants.ANGLE_GEAR_RATIO;
-        //m_swerveTurnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
+        m_swerveTurnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
 
         //////////////////////////
         /// Shooter Constants ////
@@ -81,7 +84,18 @@ public class CTREConfigs {
 
         var shooterRight = shooterRightConfigs.MotorOutput;
         shooterRight.Inverted = InvertedValue.Clockwise_Positive;
+
+        //////////////////////
+        /// Intake Configs ///
+        //////////////////////
         
+        var intakePID = m_intakeConfigs.Slot0;
+        intakePID.kP = 0.2;
+        intakePID.kI = 0;
+        intakePID.kD = 0;
+
+        var intakeOutput = m_intakeConfigs.MotorOutput;
+        intakeOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     }
     

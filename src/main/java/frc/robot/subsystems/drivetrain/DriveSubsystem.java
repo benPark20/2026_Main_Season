@@ -7,6 +7,7 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -116,6 +117,9 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("FR Swerve State Post-desaturate", swerveModuleStates[1].angle.getRotations());
     SmartDashboard.putNumber("BL Swerve State Post-desaturate", swerveModuleStates[3].angle.getRotations());
     SmartDashboard.putNumber("BR Swerve State Post-desaturate", swerveModuleStates[2].angle.getRotations());
+
+    //swerveModuleStates[2].angle =  swerveModuleStates[2].angle.getRotations()- new Rotation2d().fromRotations(0.25);
+
     m_frontLeftModule.setDesiredState(swerveModuleStates[0]);
     m_frontRightModule.setDesiredState(swerveModuleStates[1]);
     m_backRightModule.setDesiredState(swerveModuleStates[2]);
@@ -140,7 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   public void resetGyro(){
-    m_gyro.reset();
+    m_gyro.setYaw(0);
   }
 
   
@@ -155,7 +159,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Front Left Absolute", m_frontLeftModule.getAbsoluteEncoder());
     SmartDashboard.putNumber("Front Right Absolute", m_frontRightModule.getAbsoluteEncoder());
     SmartDashboard.putNumber("Back Left Absolute", m_backLeftModule.getAbsoluteEncoder());
-    SmartDashboard.putNumber("Back Eight Absolute", m_backRightModule.getAbsoluteEncoder());
+    SmartDashboard.putNumber("Back Right Absolute", m_backRightModule.getAbsoluteEncoder());
 
     //SmartDashboard.putNumber("Front Left Rotation : ", m_frontLeftModule.getTurnRotation());
     //SmartDashboard.putNumber("Front Right Rotation : ", m_frontRightModule.getTurnRotation());

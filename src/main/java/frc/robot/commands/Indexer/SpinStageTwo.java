@@ -17,7 +17,6 @@ public class SpinStageTwo extends Command {
     this.m_Indexer = m_Indexer;
     this.speed = speed;
 
-    addRequirements(m_Indexer);
   }
 
   // Called when the command is initially scheduled.

@@ -113,6 +113,7 @@ public class ShooterCalculations {
         // distance = (Constants.FieldConstants.HUB_APRILTAG_HEIGHT - Constants.ShooterConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoal);
         
         // return distance;
+
         double distance = 0;
         if (!LimelightHelpers.getTV("limelight-left")) {
         return distance; // Return the last calculated distance if target is lost

@@ -19,12 +19,15 @@ import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ReadyShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.shooter.ShootAndIndex;
+import frc.robot.commands.shooter.ShootAtHub;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 
 import java.util.function.ObjIntConsumer;
+
+import org.ejml.simple.AutomaticSimpleMatrixConvert;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
@@ -75,9 +78,12 @@ public class RobotContainer {
 
   private final Shooter m_Shooter = new Shooter();
 
-  private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
-  private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
-  private final Shoot m_Shoot = new Shoot(m_Shooter);
+  //private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
+  //private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
+  //private final Shoot m_Shoot = new Shoot(m_Shooter);
+
+  private final ShootAtHub m_ShootAtHub = new ShootAtHub(m_Shooter, m_Indexer);
+
   //private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
@@ -94,14 +100,18 @@ public class RobotContainer {
 
   /* Autos */
   // TODO improve auto
-  //Command autoCommand = new ParallelCommandGroup(m_Shoot, m_IndexerStageTwoManual);
+  //Command autoCommand = new ShootAtHub(m_Shooter, m_Indexer);
+    
+  ;//new ParallelCommandGroup(m_ShootAtHub);
 
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    /*
     Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
     preFire.onTrue(m_ReadyShooter);
+    */
    // m_chooser.setDefaultOption("Simple Auto", autoCommand);
    // m_ResetGyro.onTrue(new RunCommand(() -> m_robotDrive.resetGyro(), m_robotDrive));
 
@@ -148,9 +158,10 @@ public class RobotContainer {
   private void configureBindings() {
 
     Buttons.controller1_leftBumper.whileTrue(m_IntakeFuel);
-    Buttons.controller1_RightTrigger.whileTrue(m_Shoot);
+    Buttons.controller1_RightTrigger.whileTrue(m_ShootAtHub);
+    Buttons.controller1_rightBumper.whileTrue(m_ShootAtHub);
 
-    Buttons.controller1_minusButton.onTrue(new RunCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
+    //Buttons.controller1_minusButton.onTrue(new RunCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
 
     
     //m_chooser.getSelected();
@@ -164,6 +175,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // TODO: improve autos
-    return null;//autoCommand;
+    return null; //autoCommand;
   }
 }

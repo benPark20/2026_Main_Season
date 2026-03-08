@@ -29,6 +29,9 @@ public class Intake extends SubsystemBase {
     extenderMotor = new TalonFX(Constants.IntakeConstants.EXTENDER_MOTOR_ID);
     rotationMotor = new TalonFX(Constants.IntakeConstants.ROTATION_MOTOR_ID);
 
+    extenderMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.m_intakeConfigs);
+
+
     active = false;
 
   }
@@ -72,9 +75,9 @@ public class Intake extends SubsystemBase {
   public void moveIntakeToPosition(double position) {
     targetPosition = position;
 
-    PositionVoltage request = new PositionVoltage(0).withSlot(0);
+    PositionVoltage request = new PositionVoltage(targetPosition);
 
-    extenderMotor.setControl(request.withPosition(targetPosition));
+    extenderMotor.setControl(request);
 
   }
 
@@ -90,6 +93,10 @@ public class Intake extends SubsystemBase {
   }
   
   public double getExtenderPosition(){
+    return extenderMotor.getPosition().getValueAsDouble();
+  }
+
+  public double returnExtenderPosition(){
     return extenderMotor.getPosition().getValueAsDouble();
   }
 

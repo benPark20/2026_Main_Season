@@ -61,12 +61,14 @@ public class SwerveModule {
 
         
 
-        turningMotor.setPosition(rotationAnalogEncoder.getAbsolutePosition().getValueAsDouble() - angularOffset.getRotations()/* Constants.DriveConstants.ANGLE_GEAR_RATIO*/ );
+        turningMotor.setPosition(rotationAnalogEncoder.getAbsolutePosition().getValueAsDouble()  - angularOffset.getRotations() /*Constants.DriveConstants.ANGLE_GEAR_RATIO*/ );
         //PositionVoltage initial = new PositionVoltage(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees());
 
         //turningMotor.setControl(initial.withPosition(Math.abs(rotationAnalogEncoder.get() * 360 - angularOffset.getDegrees())));
     
       //  desiredState.angle = Rotation2d.fromRotations(rotationAnalogEncoder.getAbsolutePosition().getValueAsDouble() /* Constants.DriveConstants.ANGLE_GEAR_RATIO */);
+
+        System.out.println("Instantiating " + module_number + " swerve module");
 
     }
 
@@ -86,15 +88,20 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState desiredState){
+
+        //turningMotor.setPosition(rotationAnalogEncoder.getAbsolutePosition().getValueAsDouble() - angularOffset.getRotations()/* Constants.DriveConstants.ANGLE_GEAR_RATIO*/ );
+
         SwerveModuleState correctedDesiredState = new SwerveModuleState();
         correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
         correctedDesiredState.angle = desiredState.angle;
 
-        correctedDesiredState.optimize(new Rotation2d(turningMotor.getPosition().getValueAsDouble()));
+        //correctedDesiredState.optimize(new Rotation2d(turningMotor.getPosition().getValueAsDouble()));
 
         VelocityVoltage velocityRequest = new VelocityVoltage((correctedDesiredState.speedMetersPerSecond / 0.0508) * Constants.DriveConstants.DRIVE_GEAR_RATIO).withSlot(0);
 
         drivingMotor.setControl(velocityRequest);
+
+        //if(correctedDesiredState.angle.getRotations() > 0.5)
 
         PositionVoltage positionRequest = new PositionVoltage(correctedDesiredState.angle.getRotations() /** Constants.DriveConstants.ANGLE_GEAR_RATIO*/);
         //PositionVoltage positionRequest = new PositionVoltage(0);
