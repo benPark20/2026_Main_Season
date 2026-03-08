@@ -12,7 +12,9 @@ import frc.robot.commands.Indexer.SpinStageOneManual;
 import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.commands.Indexer.SpinStageTwoManual;
 import frc.robot.commands.Intake.IntakeFuel;
+import frc.robot.commands.Intake.IntakeFuelTimed;
 import frc.robot.commands.Intake.MoveIntakeManual;
+import frc.robot.commands.Intake.RetractIntakeTimed;
 import frc.robot.commands.Intake.RotateIntake;
 import frc.robot.commands.Intake.RotateIntakeManual;
 import frc.robot.commands.shooter.ManualShoot;
@@ -37,6 +39,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -78,6 +81,7 @@ public class RobotContainer {
 
   private final Shooter m_Shooter = new Shooter();
 
+  // TODO fix up shooter calculations; SIMPLIFY
   //private final ManualShoot m_ManualShoot = new ManualShoot(m_Shooter, m_driverController);
   //private final ReadyShooter m_ReadyShooter = new ReadyShooter(m_Shooter);
   //private final Shoot m_Shoot = new Shoot(m_Shooter);
@@ -87,28 +91,26 @@ public class RobotContainer {
   //private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
-  /*
-   * TODO move these triggers to the Buttons class
-  Trigger m_ResetEncoderFieldRelative = new JoystickButton(m_driverController, 8);
-  Trigger m_ResetGyro = new JoystickButton(m_driverController, 7);
-  */
-  
   /* Sequence & Parallel Commands */
-  private final IntakeFuel m_IntakeFuel = new IntakeFuel(m_Intake, m_Indexer);
+  private final IntakeFuelTimed m_IntakeFuelTimed = new IntakeFuelTimed(m_Intake, m_Indexer);
+  private final RetractIntakeTimed m_RetractIntakeTimed = new RetractIntakeTimed(m_Intake, m_Indexer);
+  // TODO get positional Intake stuff working
+  //private final IntakeFuel m_IntakeFuel = new IntakeFuel(m_Intake, m_Indexer);
 
-  private final ShootAndIndex m_shootAndIndex = new ShootAndIndex(m_Shooter, m_Indexer);
+  //private final ShootAndIndex m_shootAndIndex = new ShootAndIndex(m_Shooter, m_Indexer);
 
   /* Autos */
   // TODO improve auto
   //Command autoCommand = new ShootAtHub(m_Shooter, m_Indexer);
     
-  ;//new ParallelCommandGroup(m_ShootAtHub);
+  //new ParallelCommandGroup(m_ShootAtHub);
 
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     /*
+    * TODO figure out how to ready shooter 4 secs before active shift
     Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
     preFire.onTrue(m_ReadyShooter);
     */
@@ -157,11 +159,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    Buttons.controller1_leftBumper.whileTrue(m_IntakeFuel);
+    //Buttons.controller1_leftBumper.whileTrue(m_IntakeFuelTimed); TODO uncomment if needed
     Buttons.controller1_RightTrigger.whileTrue(m_ShootAtHub);
     Buttons.controller1_rightBumper.whileTrue(m_ShootAtHub);
 
-    //Buttons.controller1_minusButton.onTrue(new RunCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
+    Buttons.controller1_AButton.whileTrue(m_IntakeFuelTimed);
+    Buttons.controller1_BButton.whileTrue(m_RetractIntakeTimed);
+
+    Buttons.controller1_minusButton.onTrue(new InstantCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
 
     
     //m_chooser.getSelected();

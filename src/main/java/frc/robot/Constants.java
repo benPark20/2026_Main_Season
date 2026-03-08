@@ -116,6 +116,10 @@ public final class Constants {
     public static final int ROTATION_MOTOR_ID = 6;
     public static final int EXTENDER_MOTOR_ID = 5;
 
+    public static final double EXTENDER_KP = 0.2;
+    public static final double EXTENDER_KI = 0.0;
+    public static final double EXTENDER_KD = 0.0;
+
   }
   
   public static class ShooterConstants {

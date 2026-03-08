@@ -96,10 +96,6 @@ public class Intake extends SubsystemBase {
     return extenderMotor.getPosition().getValueAsDouble();
   }
 
-  public double returnExtenderPosition(){
-    return extenderMotor.getPosition().getValueAsDouble();
-  }
-
   
   @Override
   public void periodic() {

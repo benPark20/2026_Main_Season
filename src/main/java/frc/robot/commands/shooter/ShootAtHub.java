@@ -5,6 +5,8 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Indexer.SpinStageOne;
 import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.subsystems.Indexer;
@@ -25,6 +27,8 @@ public class ShootAtHub extends ParallelCommandGroup {
     m_Indexer = indexer;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SpinStageOne(indexer, 0.3), new SpinStageTwo(m_Indexer, 0.3), new BasicShoot(m_Shooter));
+    //addCommands(new SpinStageOne(indexer, 0.3), new SpinStageTwo(m_Indexer, 0.3), new BasicShoot(m_Shooter));
+
+    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.5)), new SpinStageOne(indexer, 0.35));
   }
 }

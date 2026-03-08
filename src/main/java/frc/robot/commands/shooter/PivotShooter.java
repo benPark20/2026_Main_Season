@@ -4,10 +4,8 @@
 
 package frc.robot.commands.shooter;
 
-import java.io.Console;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.ShooterCalculations;
 import frc.robot.subsystems.Shooter;
 

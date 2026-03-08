@@ -90,6 +90,7 @@ public class CTREConfigs {
         //////////////////////
         
         var intakePID = m_intakeConfigs.Slot0;
+        // TODO change PIDs
         intakePID.kP = 0.2;
         intakePID.kI = 0;
         intakePID.kD = 0;
