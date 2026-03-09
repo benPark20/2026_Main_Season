@@ -188,4 +188,9 @@ public final class Constants {
 
   }
 
+  public static class kFieldPositions {
+ //       public static final Translation2d BLUE_SPEAKER_POSITION = APRILTAG_POSITIONS[6];
+ //       public static final Translation2d RED_SPEAKER_POSITION = APRILTAG_POSITIONS[3];
+  }
+
 }
