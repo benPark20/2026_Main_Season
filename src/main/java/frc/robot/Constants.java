@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.slicelibs.configs.CTREConfigs;
@@ -50,6 +51,8 @@ public final class Constants {
     // Robot dimensions
     public static final double SHOOTER_HEIGHT = 1.7891; // Feet
     public static final double FLYWHEEL_RADIUS = 0.1667; // Feet
+    public static final double LIMELIGHT_ANGLE = 72.5; // TODO: Fill in degrees
+    public static final double LIMELIGHT_HEIGHT = 1.525; // TODO: Fill in feet
 
     // Maximums and minimums (Tune these)
     public static final double MAX_FLYWHEEL_VELOCITY = 35; // Feet per second
@@ -76,7 +79,8 @@ public final class Constants {
 
     // Height and length of the hub
     public static final double HUB_HEIGHT = 6; // Feet 
-    public static final double HUB_HALF_LENGTH = 1.958335; // Feet    
+    public static final double HUB_HALF_LENGTH = 1.958335; // Feet 
+    public static final double HUB_APRILTAG_HEIGHT = Units.inchesToMeters(44.25);    
 
     // How long to speed up shooter before hub active
     public static final double SPEED_SHOOTER_AT = 4; // Seconds
