@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.drivetrain;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,6 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 
 public class DriveSubsystem extends SubsystemBase {
   
@@ -54,6 +60,18 @@ public class DriveSubsystem extends SubsystemBase {
   //TODO add/fix Gyro
 
   private Pigeon2 m_gyro = new Pigeon2(24); 
+
+  PathPlannerLogging.setLogPathCallback(
+    (path) -> {
+      Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
+      addField2dTrajectory(path, "Trajectory");
+}
+    );
+    PathPlannerLogging.setLogTargetPoseCallback(
+      (pose) -> {
+        Logger.recordOutput("Odometry/Trajectory Setpoint", pose);
+      }
+    );
 
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
