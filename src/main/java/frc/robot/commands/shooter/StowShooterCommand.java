@@ -22,7 +22,7 @@ public class StowShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.pivotShooterToPosition(Constants.ShooterConstants.SHOOTER_STOW);
+    m_shooter.pivotShooterToPosition(Constants.ShooterConstants.SHOOTER_STOW / 360);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -5,19 +5,17 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ShooterCalculations;
+import frc.robot.Constants;
+import frc.robot.LUTShooter;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReadyShooter extends Command {
   private Shooter m_shooter;
-  private double m_speed;
-  double[] result = new double[2];
 
   /** Creates a new ReadyShooter. */
   public ReadyShooter(Shooter shooter) {
     m_shooter = shooter;
-    m_speed = result[1];
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -28,14 +26,9 @@ public class ReadyShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distance = ShooterCalculations.distanceToHub();
-    try {
-      result = ShooterCalculations.calculateShooterTrajectory(distance);
-    } catch (IndexOutOfBoundsException e) {
-      result[0] = 0;
-      result[1] = 0;
-    }
-    m_shooter.speedUpFlywheels(m_speed); // Spin up flywheels 4 seconds before hub active
+    double distance = LUTShooter.distanceFromHub();
+    double[] result = LUTShooter.calculateShooter(distance);
+    m_shooter.speedUpFlywheels(result[1]); // Spin up flywheels 4 seconds before hub active
   }
 
   // Called once the command ends or is interrupted.

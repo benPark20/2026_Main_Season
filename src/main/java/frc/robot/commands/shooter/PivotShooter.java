@@ -5,28 +5,31 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LUTShooter;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class PivotShooter extends Command {
   private Shooter mainShooter;
-  private double rotations;
   /** Creates a new PivotShooter. */
-  public PivotShooter(Shooter m_shooter, double targetAngle) {
+  public PivotShooter(Shooter m_shooter) {
     mainShooter = m_shooter;
-    rotations = targetAngle * 2 * Math.PI;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mainShooter.pivotShooterToPosition(rotations);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double distance = LUTShooter.distanceFromHub();
+    double[] result = LUTShooter.calculateShooter(distance);
+    mainShooter.pivotShooterToPosition(result[0] * 2 * Math.PI);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

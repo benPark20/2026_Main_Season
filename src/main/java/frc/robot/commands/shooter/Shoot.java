@@ -5,7 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.ShooterCalculations;
+import frc.robot.LUTShooter;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -16,17 +16,9 @@ public class Shoot extends ParallelCommandGroup {
   /** Creates a new Shoot. */
   public Shoot(Shooter m_shooter) {
     mainShooter = m_shooter;
-    double[] result = new double[2];
-    double distance = ShooterCalculations.distanceToHub();
-    try {
-      result = ShooterCalculations.calculateShooterTrajectory(distance);
-    } catch (IndexOutOfBoundsException e) {
-      result[0] = 0;
-      result[1] = 0;
-    }
     
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PivotShooter(mainShooter, result[0]), new SpinFlywheels(mainShooter, result[1]));
+    addCommands(new PivotShooter(mainShooter), new SpinFlywheels(mainShooter));
   }
 }

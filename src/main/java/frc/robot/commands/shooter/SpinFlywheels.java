@@ -6,16 +6,15 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.LUTShooter;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SpinFlywheels extends Command {
   private Shooter mainShooter;
-  private double angularSpeed;
   /** Creates a new SpinFlywheels. */
-  public SpinFlywheels(Shooter m_shooter, double linearSpeed) {
+  public SpinFlywheels(Shooter m_shooter) {
     mainShooter = m_shooter;
-    angularSpeed = linearSpeed / Constants.ShooterConstants.FLYWHEEL_RADIUS;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter);
   }
@@ -29,7 +28,9 @@ public class SpinFlywheels extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mainShooter.spinFlywheels(-angularSpeed);
+    double distance = LUTShooter.distanceFromHub();
+    double[] result = LUTShooter.calculateShooter(distance);
+    mainShooter.speedUpFlywheels(result[1]);
 
   }
 
