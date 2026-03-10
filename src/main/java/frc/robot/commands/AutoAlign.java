@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 
@@ -18,7 +19,7 @@ public class AutoAlign extends Command {
 
   private boolean outOfFrame;
 
-  private boolean stopped;
+  private boolean aligned;
   
 
   public AutoAlign(DriveSubsystem drivetrain) {
@@ -33,7 +34,7 @@ public class AutoAlign extends Command {
   @Override
   public void initialize() {
     outOfFrame = false;
-    stopped = false;
+    aligned = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,30 +56,30 @@ public class AutoAlign extends Command {
 
       if (Math.abs(XOffsetRotation) < 5) {
         outOfFrame = true;
-        m_drivesubsystem.drive(0, 0, -0.3, false);
+        m_drivesubsystem.drive(0, 0, Constants.DriveConstants.kMaxAngularSpeed/2, false);
       } else if (outOfFrame == false) {
-        m_drivesubsystem.drive(-0.3, 0, 0, false);
+        m_drivesubsystem.drive(0, 0, 0, true);
       }
     }
     else if (outOfFrame == false) {
-      m_drivesubsystem.drive(-0.3, 0, 0, false);
+      m_drivesubsystem.drive(0, 0, 0, true);
 
       //rotation = 15 * (timer.get() + 3.5) * Math.sin(5 * (timer.get() + 3.5));
     } else {
-      stopped = true;
+      aligned = true;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_drivesubsystem.drive(0, 0, 0, false);
+  public void end(boolean interrupted) { 
+    m_drivesubsystem.drive(0,0,0, false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   if (stopped) {
+   if (aligned) {
       return true;
     } else {
       return false;

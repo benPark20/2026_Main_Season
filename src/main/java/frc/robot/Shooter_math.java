@@ -24,58 +24,58 @@ public class Shooter_math {
         radius_of_wheels = 0.5;
     }
 
-    public double distanceFromGoal(){ 
-       if (!LimelightHelpers.getTV("limelight")) {
-        return distance; // Return the last calculated distance if target is lost
-    }
+    // public double distanceFromGoal(){ 
+    //    if (!LimelightHelpers.getTV("limelight")) {
+    //     return distance; // Return the last calculated distance if target is lost
+    // }
 
-        //Get the vertical offset (ty) from LimelightHelpers
-        double targetOffsetAngle_Vertical = LimelightHelpers.getTY("limelight");
+    //     //Get the vertical offset (ty) from LimelightHelpers
+    //     double targetOffsetAngle_Vertical = LimelightHelpers.getTY("limelight");
 
-        //Get your constants from the Constants file
-        double limelightMountAngleDegrees = Constants.ShooterConstants.AngleOfLimeLight; 
-        double limelightLensHeightInches = Constants.ShooterConstants.heightOfLimeLight; 
-        double goalHeightInches = Constants.ShooterConstants.heightofAprilTag * 39.37; // convert meters to inches
+    //     //Get your constants from the Constants file
+    //     double limelightMountAngleDegrees = Constants.ShooterConstants.AngleOfLimeLight; 
+    //     double limelightLensHeightInches = Constants.ShooterConstants.heightOfLimeLight; 
+    //     double goalHeightInches = Constants.ShooterConstants.heightofAprilTag * 39.37; // convert meters to inches
 
-        //Calculate the total angle to the target
-        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+    //     //Calculate the total angle to the target
+    //     double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    //     double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
 
-        //Calculate horizontal distance (X)
-        // Formula: (TargetHeight - CameraHeight) / tan(TotalAngle)
-        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+    //     //Calculate horizontal distance (X)
+    //     // Formula: (TargetHeight - CameraHeight) / tan(TotalAngle)
+    //     double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
 
-        //Update the global distance variable (converted to meters)
-        distance = distanceFromLimelightToGoalInches / 39.37; 
+    //     //Update the global distance variable (converted to meters)
+    //     distance = distanceFromLimelightToGoalInches / 39.37; 
         
-        return distance;
-    }
+    //     return distance;
+    // }
 
 
 
 
     /** @return the minimum velocity needed to shoot the ball into the target
      */
-    public double min_velocity(){
-        distance = distanceFromGoal(); // Need to account for difference in the limelight's height and the shooter's height
-        // distance  =  LimelightHelpers.getBotPose_TargetSpace("limelight")[0]; (can be used but is less reliable)
-        velocity = Math.sqrt(gravity*(height_of_target+Math.sqrt(Math.pow(height_of_target, 2)+Math.pow(distance, 2)))); // The above formula is used to calculate the minimum velocity need to shoot the projectile. It is from a physics textbook.
+    // public double min_velocity(){
+    //     distance = distanceFromGoal(); // Need to account for difference in the limelight's height and the shooter's height
+    //     // distance  =  LimelightHelpers.getBotPose_TargetSpace("limelight")[0]; (can be used but is less reliable)
+    //     velocity = Math.sqrt(gravity*(height_of_target+Math.sqrt(Math.pow(height_of_target, 2)+Math.pow(distance, 2)))); // The above formula is used to calculate the minimum velocity need to shoot the projectile. It is from a physics textbook.
         
         
-        return velocity;
-    }
+    //     return velocity;
+    // }
 
-    public double min_angle(){
-        distance = distanceFromGoal();
+    // public double min_angle(){
+    //     distance = distanceFromGoal();
 
-        targetangle = min_velocity()/distance;
+    //     targetangle = min_velocity()/distance;
 
-        angle = (targetangle + 90)/2
+    //     angle = (targetangle + 90)/2
         
-        // Math.atan((height_of_target+Math.sqrt(Math.pow(height_of_target, 2)+Math.pow(distance, 2)))/distance); // min angle required to get to the distance
+    //     // Math.atan((height_of_target+Math.sqrt(Math.pow(height_of_target, 2)+Math.pow(distance, 2)))/distance); // min angle required to get to the distance
         
-        return angle*(180/Math.PI); // convert radians to degrees
-    }
+    //     return angle*(180/Math.PI); // convert radians to degrees
+    // }
 
     
 }

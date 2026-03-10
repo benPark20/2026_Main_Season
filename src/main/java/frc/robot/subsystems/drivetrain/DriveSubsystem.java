@@ -61,17 +61,17 @@ public class DriveSubsystem extends SubsystemBase {
 
   private Pigeon2 m_gyro = new Pigeon2(24); 
 
-  PathPlannerLogging.setLogPathCallback(
-    (path) -> {
-      Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
-      addField2dTrajectory(path, "Trajectory");
-}
-    );
-    PathPlannerLogging.setLogTargetPoseCallback(
-      (pose) -> {
-        Logger.recordOutput("Odometry/Trajectory Setpoint", pose);
-      }
-    );
+//   PathPlannerLogging.setLogPathCallback(
+//     (path) -> {
+//       Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
+//       addField2dTrajectory(path, "Trajectory");
+// }
+//     );
+//     PathPlannerLogging.setLogTargetPoseCallback(
+//       (pose) -> {
+//         Logger.recordOutput("Odometry/Trajectory Setpoint", pose);
+//       }
+//     );
 
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
