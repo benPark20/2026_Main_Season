@@ -111,6 +111,15 @@ public final class Constants {
 
   }
 
+  public static final class AutoConstants {
+
+    /* Auto Alignment PIDs */
+    public static final double AUTO_ALIGN_KP = 6.789;
+    public static final double AUTO_ALIGN_KI = 0;
+    public static final double AUTO_ALIGN_KD = 0;
+
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;

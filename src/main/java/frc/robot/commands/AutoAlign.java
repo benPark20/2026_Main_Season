@@ -30,7 +30,8 @@ public class AutoAlign extends Command {
 
     m_drivesubsystem = drivetrain;
 
-    rotationController = new PIDController(6.789, 0, 0);
+    rotationController = new PIDController(Constants.AutoConstants.AUTO_ALIGN_KP, 
+      Constants.AutoConstants.AUTO_ALIGN_KI, Constants.AutoConstants.AUTO_ALIGN_KD);
   }
 
   private boolean isInFrame() {
