@@ -52,11 +52,11 @@ public class AutoAlign extends Command {
   }
 
   public boolean isOfftarget() {
-    return Math.abs(getError()) > 3;
+    return Math.abs(getError()) > 1;
   }
 
   public boolean isOntarget() {
-    return Math.abs(getError()) < 3;
+    return Math.abs(getError()) < 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,7 +74,7 @@ public class AutoAlign extends Command {
       }
     }
     else {
-      m_drivesubsystem.drive(0, 0, Constants.DriveConstants.kMaxAngularSpeed/8, true);
+      m_drivesubsystem.drive(0, 0, Constants.DriveConstants.kMaxAngularSpeed/32, true);
     }
 
   }

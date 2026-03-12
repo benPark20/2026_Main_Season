@@ -186,7 +186,7 @@ public final class Constants {
   }
 
   public static class AutoConstants {
-    public static final double AUTO_ALIGN_KP = 1;
+    public static final double AUTO_ALIGN_KP = .0067;
     public static final double AUTO_ALIGN_KI = 0;
     public static final double AUTO_ALIGN_KD = 0;
   }

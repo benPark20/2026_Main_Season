@@ -19,6 +19,8 @@ import frc.robot.commands.Intake.OscillateIntake;
 import frc.robot.commands.Intake.RetractIntakeTimed;
 import frc.robot.commands.Intake.RotateIntake;
 import frc.robot.commands.Intake.RotateIntakeManual;
+import frc.robot.commands.shooter.AutoBasicShoot;
+import frc.robot.commands.shooter.AutoShootAtHub;
 import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ReadyShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -106,7 +108,7 @@ public class RobotContainer {
 
   /* Autos */
   // TODO improve auto
-  Command autoCommand = new ShootAtHub(m_Shooter, m_Indexer);
+  Command autoCommand = new AutoShootAtHub(m_Shooter, m_Indexer);
     
   //new ParallelCommandGroup(m_ShootAtHub);
 
