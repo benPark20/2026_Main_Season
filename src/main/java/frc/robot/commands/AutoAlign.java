@@ -24,8 +24,6 @@ public class AutoAlign extends Command {
   
   private PIDController rotationController;
 
-  private boolean isOutofFrame = true;
-
   public AutoAlign(DriveSubsystem drivetrain) {
 
     m_drivesubsystem = drivetrain;
@@ -35,12 +33,12 @@ public class AutoAlign extends Command {
   }
 
   private boolean isInFrame() {
-    LimelightHelpers.setAlignIDs(10,25);
+    //LimelightHelpers.setAlignIDs(10,25);
     return LimelightHelpers.getTV("limelight-shooter");
   }
 
   private double getError() {
-    System.out.println(LimelightHelpers.getTX("limelight-shooter"));
+    //System.out.println(LimelightHelpers.getTX("limelight-shooter"));
     return LimelightHelpers.getTX("limelight-shooter");
   }
 
@@ -64,12 +62,12 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {    
-    SmartDashboard.putBoolean("Target", isInFrame());
+    SmartDashboard.putBoolean("Target", isInFrame()); 
+    SmartDashboard.putNumber("TX", getError());
    // System.out.println("TV: " + n);
 
     if (isInFrame()) {
       if (isOfftarget()) {
-        isOutofFrame = false;
         m_drivesubsystem.drive(0, 0,getOutput(),true);
       } else {
         m_drivesubsystem.drive(0, 0, 0, true);
@@ -89,8 +87,13 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    LimelightHelpers.resetLimelightIDs();
-   return isOntarget();
+  //  LimelightHelpers.resetLimelightIDs();
+    if (isOntarget()) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 

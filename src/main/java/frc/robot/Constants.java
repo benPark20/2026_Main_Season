@@ -185,4 +185,10 @@ public final class Constants {
     public static final int ALIGN_BLUE = 10;
   }
 
+  public static class AutoConstants {
+    public static final int AUTO_ALIGN_KP = 1;
+    public static final int AUTO_ALIGN_KI = 0;
+    public static final int AUTO_ALIGN_KD = 0;
+  }
+
 }

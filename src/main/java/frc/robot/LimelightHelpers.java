@@ -1001,14 +1001,14 @@ public class LimelightHelpers {
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         int targetTagID;
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-            targetTagID = target1; // Example Red ID
+            targetTagID = target2; 
         } else {
-            targetTagID = target2; // Example Blue ID
+            targetTagID = target1;
         }
-        LimelightHelpers.setPriorityTagID("limelight-left", targetTagID);
+        LimelightHelpers.setPriorityTagID("limelight-shooter", targetTagID);
     }
 
     public static void resetLimelightIDs() {
-        LimelightHelpers.setPriorityTagID("limelight-left", -1);
+        LimelightHelpers.setPriorityTagID("limelight-shooter", -1);
     }
 }
