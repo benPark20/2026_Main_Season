@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class BasicShoot extends Command {
+public class AutoBasicShoot extends Command {
 
   private Shooter m_Shooter;
 
   /** Creates a new ManualShoot. */
-  public BasicShoot(Shooter shooter) {
+  public AutoBasicShoot(Shooter shooter) {
     m_Shooter = shooter;
     addRequirements(m_Shooter);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,7 +26,7 @@ public class BasicShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.spinFlywheels(-0.44);
+    m_Shooter.spinFlywheels(-0.43);
   }
 
   // Called once the command ends or is interrupted.

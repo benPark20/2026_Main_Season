@@ -33,16 +33,16 @@ public class AutoAlign extends Command {
   }
 
   private boolean isInFrame() {
-    //LimelightHelpers.setAlignIDs(10,25);
+//    LimelightHelpers.setAlignIDs(10,25);
     return LimelightHelpers.getTV("limelight-shooter");
   }
 
   private double getError() {
-    //System.out.println(LimelightHelpers.getTX("limelight-shooter"));
+    System.out.println(LimelightHelpers.getTX("limelight-shooter"));
     return LimelightHelpers.getTX("limelight-shooter");
   }
 
-  private double getOutput() {
+  public double getOutput() {
     return rotationController.calculate(getError(),0);
   }
 
@@ -52,11 +52,11 @@ public class AutoAlign extends Command {
   }
 
   public boolean isOfftarget() {
-    return Math.abs(getError()) > 5;
+    return Math.abs(getError()) > 3;
   }
 
   public boolean isOntarget() {
-    return Math.abs(getError()) < 5;
+    return Math.abs(getError()) < 3;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,26 +74,31 @@ public class AutoAlign extends Command {
       }
     }
     else {
-      m_drivesubsystem.drive(0, 0, Constants.DriveConstants.kMaxAngularSpeed/16, true);
+      m_drivesubsystem.drive(0, 0, Constants.DriveConstants.kMaxAngularSpeed/8, true);
     }
 
   }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) { 
-    m_drivesubsystem.drive(0,0,0, false);
+    m_drivesubsystem.drive(0,0,0, true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  //  LimelightHelpers.resetLimelightIDs();
+ // LimelightHelpers.resetLimelightIDs();
+  if (isInFrame()) {
     if (isOntarget()) {
       return true;
     }
     else {
       return false;
     }
+  }
+  else {
+    return false;
+  }
   }
 
 
