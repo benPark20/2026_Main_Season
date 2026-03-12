@@ -28,6 +28,6 @@ public class IntakeFuel extends ParallelCommandGroup {
     // TODO get position for move intake
     // TODO get correct speed for rotate intake
     // TODO get correct speed for StageOne of the indexer
-    addCommands(new MoveIntake(m_Intake, 196.7332), new RotateIntake(m_Intake, 0.25), new SpinStageOne(m_Indexer, 0.45));
+    addCommands(new MoveIntake(m_Intake, 196.7332), new RotateIntake(m_Intake, 0.75), new SpinStageOne(m_Indexer, 0.45));
   }
 }

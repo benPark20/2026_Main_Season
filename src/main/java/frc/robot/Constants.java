@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.path.PathConstraints;
+//import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -104,7 +104,7 @@ public final class Constants {
     public static final double TURN_KD = 0;
 
     //TODO: Tune PathPlanner Values 
-    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.8, 6.5, 11, 12.5);
+   // public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.8, 6.5, 11, 12.5);
     public static final double TRANSLATION_KP = 6.0;
     public static final double ROTATION_KP = 4.0;
   
@@ -114,7 +114,7 @@ public final class Constants {
   public static final class AutoConstants {
 
     /* Auto Alignment PIDs */
-    public static final double AUTO_ALIGN_KP = 6.789;
+    public static final double AUTO_ALIGN_KP = 1;
     public static final double AUTO_ALIGN_KI = 0;
     public static final double AUTO_ALIGN_KD = 0;
 

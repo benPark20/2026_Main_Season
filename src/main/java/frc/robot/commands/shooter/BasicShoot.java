@@ -26,7 +26,7 @@ public class BasicShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.spinFlywheels(-0.40);
+    m_Shooter.spinFlywheels(-0.50);
   }
 
   // Called once the command ends or is interrupted.

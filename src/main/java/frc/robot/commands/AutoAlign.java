@@ -36,11 +36,12 @@ public class AutoAlign extends Command {
 
   private boolean isInFrame() {
     LimelightHelpers.setAlignIDs(10,25);
-    return LimelightHelpers.getTV("limelight-left");
+    return LimelightHelpers.getTV("limelight-shooter");
   }
 
   private double getError() {
-    return LimelightHelpers.getTX("limelight-left");
+    System.out.println(LimelightHelpers.getTX("limelight-shooter"));
+    return LimelightHelpers.getTX("limelight-shooter");
   }
 
   private double getOutput() {

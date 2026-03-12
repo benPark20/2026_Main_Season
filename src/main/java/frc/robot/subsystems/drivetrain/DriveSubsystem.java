@@ -4,8 +4,8 @@
 
 package frc.robot.subsystems.drivetrain;
 
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.AutoLogOutput;
+// import org.littletonrobotics.junction.Logger;
+// import org.littletonrobotics.junction.AutoLogOutput;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
-import com.pathplanner.lib.util.PathPlannerLogging;
+//import com.pathplanner.lib.util.PathPlannerLogging;
 
 
 public class DriveSubsystem extends SubsystemBase {

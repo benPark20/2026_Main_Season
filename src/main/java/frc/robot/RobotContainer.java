@@ -134,7 +134,7 @@ public class RobotContainer {
               MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
               MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
               MathUtil.applyDeadband(m_driverController.getRawAxis(4), OIConstants.kDriveDeadband), //rotation
-              false),
+              true),
             m_robotDrive)
   );
 
