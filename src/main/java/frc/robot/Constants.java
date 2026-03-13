@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import frc.slicelibs.configs.CTREConfigs;
 
 /**
@@ -24,8 +23,102 @@ public final class Constants {
 
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
 
-  public static class OperatorConstants {
+
+  public static class IndexerConstants {
+    //TODO get motor IDs
+    public static final int STAGE_ONE_MOTOR_ID = 18;
+    public static final int STAGE_TWO_MOTOR_ID = 1;
+  }
+
+  public static class DriveConstants {
+    // Chassis configuration
+    public static final double kTrackWidth = Units.inchesToMeters(15.4498); //TODO: fine tune measurements
+    // Distance between centers of right and left wheels on robot
+    public static final double kWheelBase = Units.inchesToMeters(23.1782);  //TODO: fine tune measurements
+
+    // Driving Parameters - Note that these are not the maximum capable speeds of
+    // the robot, rather the allowed maximum speeds
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAngularSpeed = 3 / Math.hypot(kTrackWidth / 2, kWheelBase / 2); // radians per second
+
+    public static final double kWheelRadius = 0.0508; //in Meters
+
+    // Distance between front and back wheels on robot
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // back right
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));  //back left
+
+    // Angular offsets of the modules relative to the chassis in radians
+    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+    public static final double kFrontRightChassisAngularOffset = 0;
+    public static final double kRearLeftChassisAngularOffset = Math.PI;
+    public static final double kRearRightChassisAngularOffset = Math.PI / 2;
+
+    //Angular offsets of the wheels
+    public static final Rotation2d kFrontLeftAngulatOffset = Rotation2d.fromRotations(0.514);
+    public static final Rotation2d kFrontRightAngularOffset = Rotation2d.fromRotations(0.481);
+    public static final Rotation2d kRearLeftAngularOffset = Rotation2d.fromRotations(0.521);
+    public static final Rotation2d kRearRightAngularOffset = Rotation2d.fromRotations(0.816);
+
+    /* MOTOR IDS */
+    public static final int FRONT_LEFT_DRIVE_ID = 17;
+    public static final int FRONT_RIGHT_DRIVE_ID = 13;
+    public static final int BACK_LEFT_DRIVE_ID = 15;
+    public static final int BACK_RIGHT_DRIVE_ID = 11;
+
+    public static final int FRONT_LEFT_TURN_ID = 16;
+    public static final int FRONT_RIGHT_TURN_ID = 12;
+    public static final int BACK_LEFT_TURN_ID = 14;
+    public static final int BACK_RIGHT_TURN_ID = 10;
+    
+    /* Encoder IDs */
+    public static final int FRONT_LEFT_ENCODER_ID = 23;
+    public static final int FRONT_RIGHT_ENCODER_ID = 21;
+    public static final int BACK_LEFT_ENCODER_ID = 20;
+    public static final int BACK_RIGHT_ENCODER_ID = 22;
+
+    /* Drivetrain Gear Ratios */
+    public static final double DRIVE_GEAR_RATIO = (5.79 / 1.0); // 5.79:1
+    public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
+
+
+    //TODO: Figure out PIDs for both Drive Motors and Turn Motors
+    public static final double DRIVE_KP = .05;
+    public static final double DRIVE_KI = 0;
+    public static final double DRIVE_KD = 0;
+
+    public static final double TURN_KP = 20;
+    public static final double TURN_KI = 0;
+    public static final double TURN_KD = 0;
+
+    /* Drivetrain Current Limits */ //TODO maybe tune current limits
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 80;
+    public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 40;
+
+    public static final double TURN_STATOR_CURRENT_LIMIT = 40;
+    public static final double TURN_SUPPLY_CURRENT_LIMIT = 30;
+    
+
+  }
+
+  public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
+    public static final double kDriveDeadband = 0.025;
+  }
+
+  public static class IntakeConstants {
+
+    //TODO find actual motor IDs
+    public static final int ROTATION_MOTOR_ID = 6;
+    public static final int EXTENDER_MOTOR_ID = 5;
+
+    public static final double EXTENDER_KP = 0.2;
+    public static final double EXTENDER_KI = 0.0;
+    public static final double EXTENDER_KD = 0.0;
+
   }
   
   public static class ShooterConstants {
@@ -50,9 +143,15 @@ public final class Constants {
 
     // Robot dimensions
     public static final double SHOOTER_HEIGHT = 1.7891; // Feet
-    public static final double FLYWHEEL_RADIUS = Units.inchesToMeters(2); // Inches
+    public static final double FLYWHEEL_RADIUS = 0.1667; // Feet
     public static final double LIMELIGHT_ANGLE = 72.5; // TODO: Fill in degrees
-    public static final double LIMELIGHT_HEIGHT = Units.feetToMeters(1.525); // TODO: Fill in feet
+    public static final double LIMELIGHT_HEIGHT = 1.525; // TODO: Fill in feet
+
+    // Maximums and minimums (Tune these)
+    public static final double MAX_FLYWHEEL_VELOCITY = 35; // Feet per second
+    public static final double MIN_FLYWHEEL_VELOCITY = 10; // Feet per second
+    public static final double MAX_SHOOTER_ANGLE = 1.36136; // Radians
+    public static final double MIN_SHOOTER_ANGLE = 0.994838; // Radians
 
     // Errors //
     public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the flywheel RPM

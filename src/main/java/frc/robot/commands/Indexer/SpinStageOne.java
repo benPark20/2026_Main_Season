@@ -2,40 +2,37 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.Indexer;
 
-import edu.wpi.first.wpilibj.XboxController;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Indexer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualShoot extends Command {
-
-  private Shooter m_Shooter;
-  private XboxController m_Controller;
-
-  /** Creates a new ManualShoot. */
-  public ManualShoot(Shooter shooter, XboxController controller) {
-    m_Shooter = shooter;
-    m_Controller = controller;
-    addRequirements(m_Shooter);
+public class SpinStageOne extends Command {
+  /** Creates a new SpinStageOne. */
+  private Indexer m_Indexer;
+  private double speed;
+  public SpinStageOne(Indexer m_Indexer, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.m_Indexer = m_Indexer;
+    this.speed = speed;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.spinFlywheels(m_Controller.getRawAxis(1));
+    m_Indexer.moveStageOneMotor(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Shooter.spinFlywheels(0);
+    m_Indexer.moveStageOneMotor(0);
   }
 
   // Returns true when the command should end.

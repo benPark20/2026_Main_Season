@@ -4,20 +4,17 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualShoot extends Command {
+public class BasicShoot extends Command {
 
   private Shooter m_Shooter;
-  private XboxController m_Controller;
 
   /** Creates a new ManualShoot. */
-  public ManualShoot(Shooter shooter, XboxController controller) {
+  public BasicShoot(Shooter shooter) {
     m_Shooter = shooter;
-    m_Controller = controller;
     addRequirements(m_Shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,7 +26,7 @@ public class ManualShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.spinFlywheels(m_Controller.getRawAxis(1));
+    m_Shooter.spinFlywheels(-0.62);
   }
 
   // Called once the command ends or is interrupted.
