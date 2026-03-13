@@ -144,15 +144,7 @@ public class RobotContainer {
 
   );
 
-  // m_robotDrive.setDefaultCommand(
-  //   new RunCommand(
-  //     () -> m_robotDrive.drive(
-  //           MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
-  //           MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
-  //           MathUtil.applyDeadband(m_Align.getOutput(), OIConstants.kDriveDeadband), //rotation
-  //             true),
-  //           m_robotDrive)
-  //   );
+
     
       
           
@@ -187,7 +179,15 @@ public class RobotContainer {
 
     Buttons.controller1_minusButton.onTrue(new InstantCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
 
-    Buttons.controller1_YButton.whileTrue(m_Align);
+    Buttons.controller1_YButton.onTrue(    
+      new RunCommand(
+       () -> m_robotDrive.drive(
+             MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
+             MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
+              MathUtil.applyDeadband(m_Align.getOutput(), OIConstants.kDriveDeadband), //rotation
+               true),
+            m_robotDrive)
+      );
 
     
     //m_chooser.getSelected();
