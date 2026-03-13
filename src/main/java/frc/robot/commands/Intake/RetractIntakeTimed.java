@@ -24,6 +24,6 @@ public class RetractIntakeTimed extends ParallelCommandGroup {
     m_Indexer = indexer;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveIntakeTimed(m_Intake, 0.3), /*new RotateIntake(intake, -0.35),*/ new SpinStageOne(m_Indexer, 0.45));
+    addCommands(new MoveIntakeTimed(m_Intake, 0.45), /*new RotateIntake(intake, -0.35),*/ new SpinStageOne(m_Indexer, 0.45));
   }
 }

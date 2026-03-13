@@ -24,6 +24,6 @@ public class ShootAndIndex extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     // TODO tune Stage Two Speeds
-    addCommands(new SpinStageTwo(indexer, 0.3), new Shoot(shooter));
+    addCommands(new SpinStageTwo(indexer, 0.875), new Shoot(shooter));
   }
 }

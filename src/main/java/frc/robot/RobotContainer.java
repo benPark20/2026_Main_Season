@@ -165,10 +165,10 @@ public class RobotContainer {
     Buttons.controller1_RightTrigger.whileTrue(m_ShootAtHub);
     Buttons.controller1_rightBumper.whileTrue(m_ShootAtHub);
 
-    Buttons.controller1_AButton.whileTrue(m_IntakeFuelTimed);
-    Buttons.controller1_BButton.whileTrue(m_RetractIntakeTimed);
+    Buttons.controller1_leftBumper.whileTrue(m_IntakeFuelTimed);
+    Buttons.controller1_LeftTrigger.whileTrue(m_RetractIntakeTimed);
 
-    Buttons.controller1_minusButton.onTrue(new InstantCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
+    Buttons.controller1_plusButton.onTrue(new InstantCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
 
     //Buttons.controller1_XButton.whileTrue(m_OscillateIntake); TODO reimplement
     //m_chooser.getSelected();

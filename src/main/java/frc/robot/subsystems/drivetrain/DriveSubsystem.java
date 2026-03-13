@@ -26,7 +26,7 @@ public class DriveSubsystem extends SubsystemBase {
    Constants.DriveConstants.FRONT_LEFT_TURN_ID, 
    Constants.DriveConstants.FRONT_LEFT_ENCODER_ID,
    Constants.DriveConstants.kFrontLeftChassisAngularOffset, 
-   Constants.DriveConstants.kFrontLeftAngulatOffset);
+   Constants.DriveConstants.kFrontLeftAngularOffset);
 
   private final SwerveModule m_frontRightModule = new SwerveModule(
     1,

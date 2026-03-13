@@ -56,7 +56,7 @@ public final class Constants {
     public static final double kRearRightChassisAngularOffset = Math.PI / 2;
 
     //Angular offsets of the wheels
-    public static final Rotation2d kFrontLeftAngulatOffset = Rotation2d.fromRotations(0.514);
+    public static final Rotation2d kFrontLeftAngularOffset = Rotation2d.fromRotations(0.514);
     public static final Rotation2d kFrontRightAngularOffset = Rotation2d.fromRotations(0.481);
     public static final Rotation2d kRearLeftAngularOffset = Rotation2d.fromRotations(0.521);
     public static final Rotation2d kRearRightAngularOffset = Rotation2d.fromRotations(0.816);
@@ -88,7 +88,7 @@ public final class Constants {
     public static final double DRIVE_KI = 0;
     public static final double DRIVE_KD = 0;
 
-    public static final double TURN_KP = 20;
+    public static final double TURN_KP = 55;
     public static final double TURN_KI = 0;
     public static final double TURN_KD = 0;
 

@@ -25,6 +25,6 @@ public class IntakeFuelTimed extends ParallelCommandGroup {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveIntakeTimed(m_Intake, -0.45), new RotateIntake(m_Intake, 0.75), new SpinStageOne(m_Indexer, 0.35));
+    addCommands(new MoveIntakeTimed(m_Intake, -0.67), new RotateIntake(m_Intake, 0.875), new SpinStageOne(m_Indexer, 0.5));
   }
 }
