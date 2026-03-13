@@ -42,7 +42,8 @@ public class AutoAlign extends Command {
     return LimelightHelpers.getTX("limelight-shooter");
   }
 
-  public double getOutput() {
+  public double 
+  getOutput() {
     return rotationController.calculate(getError(),0);
   }
 
@@ -52,11 +53,11 @@ public class AutoAlign extends Command {
   }
 
   public boolean isOfftarget() {
-    return Math.abs(getError()) > 1;
+    return Math.abs(getError()) > .7;
   }
 
   public boolean isOntarget() {
-    return Math.abs(getError()) < 1;
+    return Math.abs(getError()) < .7;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
