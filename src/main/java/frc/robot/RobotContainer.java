@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.IOConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Indexer.SpinStageOne;
@@ -130,9 +130,9 @@ public class RobotContainer {
     //     // Turning is controlled by the X axis of the right stick.
           new RunCommand(  
             () -> m_robotDrive.drive(
-              MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //drive
-              MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband),
-              MathUtil.applyDeadband(m_driverController.getRawAxis(4), OIConstants.kDriveDeadband), //rotation
+              MathUtil.applyDeadband(m_driverController.getRawAxis(1), IOConstants.kDriveDeadband), //translation
+              MathUtil.applyDeadband(m_driverController.getRawAxis(0), IOConstants.kDriveDeadband), //translation
+              MathUtil.applyDeadband(m_driverController.getRawAxis(4), IOConstants.kDriveDeadband), //rotation
               true),
             m_robotDrive)
   );

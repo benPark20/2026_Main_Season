@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
 public class Buttons {
-    public static XboxController controller1 = new XboxController(Constants.OIConstants.kDriverControllerPort);
+    public static XboxController controller1 = new XboxController(Constants.IOConstants.kDriverControllerPort);
 
     /* DRIVER CONTROLLER */
     public static Trigger controller1_AButton = new JoystickButton(controller1, 1);

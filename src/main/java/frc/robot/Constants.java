@@ -102,7 +102,7 @@ public final class Constants {
 
   }
 
-  public static final class OIConstants {
+  public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.025;
@@ -116,6 +116,10 @@ public final class Constants {
     public static final double EXTENDER_KP = 0.2;
     public static final double EXTENDER_KI = 0.0;
     public static final double EXTENDER_KD = 0.0;
+    public static final double EXTENDER_KG = 0.0; //feedforward value
+    public static final double EXTENDER_RATIO = 50/9; //5.55 repeating
+    public static final double POSITION_CONVERSION_FACTOR = (0.0254 * Math.PI) * EXTENDER_RATIO; //(pitch diameter of pinion * pi) * ratio
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR; //meters per second
 
   }
   
