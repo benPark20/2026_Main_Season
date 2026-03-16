@@ -38,37 +38,16 @@ public class Intake extends frc.slicelibs.TalonFXPositionalSubsystem {
   }
 
   /**
-   * Changes if intake is active
-   * @param setTrue true or false value to set boolean
-  */
-  public void setActive(boolean setTrue) {
-    active = setTrue;
-  }
-  
-  /**
-   * Returns true if boolean is active
-   * @return
-   */
-  public boolean isActive() {
-    return active;
-  }
-  
-  /**
-   * Sets speed of the extender motor
-   * @param speed speed to set the motor to (-1.0 to 1.0)
-   */
-  public void moveExtendMotor(double speed) {
-    set(speed);
-  }
-
-  /**
    * Sets speed of rotation motor
    * @param speed speed to set the motor to (-1.0 to 1.0)
    */
-  public void moveRotationMotor(double speed) {
+  public void spinRoller(double speed) {
     rotationMotor.set(speed);
   }
 
+  public void stopRoller() {
+    rotationMotor.set(0.0);
+  }
   /**
    * Moves the intake to the set position
    * @param position position to have the intake move to
@@ -76,22 +55,15 @@ public class Intake extends frc.slicelibs.TalonFXPositionalSubsystem {
   public void moveIntakeToPosition(double position) {
     setPosition(position);
   }
-
-  /**
-   * Increases motor speed
-   * @param speed speed to set the motor to (-1.0 to 1.0)
-   */
-  public void speedMotorUp(double speed){
-      
-    VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
-    rotationMotor.setControl(request.withVelocity(speed));
-  }
   
+  public boolean isStowed() { return (getExtenderPosition() < .127); } //5" bumper tolerance
+
+  public boolean isDeployed() { return (getExtenderPosition() > Constants.IntakeConstants.DEPLOYED_POSITION - 0.0127); } // 0.5" tolerance
+
   public double getExtenderPosition(){
     return getPositions()[0];
   }
 
-  
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake extender position: ", getExtenderPosition());

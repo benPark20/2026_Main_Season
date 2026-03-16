@@ -27,6 +27,8 @@ public final class Constants {
     /* Indexer Motor IDs */
     public static final int STAGE_ONE_MOTOR_ID = 18;
     public static final int STAGE_TWO_MOTOR_ID = 1;
+
+    public static final double STAGE_ONE_INTAKE_SPEED = 0.5;
   }
 
   public static class DriveConstants {
@@ -124,8 +126,11 @@ public final class Constants {
 
     public static final double STOWED_POSITION = 0.0; // Meters
     public static final double DEPLOYED_POSITION = 0.2921; // Meters
+    public static final double OSCILLATION_AMOUNT = .02; // Meters; how far it goes out
+    public static final double OSCILLATION_DIFF = .01; // Meters; how much further it goes in
     // Roller motor constants
-    public static final double ROTATION_SPEED = 0.8;
+    public static final double ROLLER_SPEED = 0.8;
+    public static final double ROLLER_RETRACT_SPEED = 0.0;
   }
   
   public static class ShooterConstants {

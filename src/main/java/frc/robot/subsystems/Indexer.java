@@ -21,14 +21,18 @@ public class Indexer extends SubsystemBase {
     stageTwoMotor = new TalonFX(Constants.IndexerConstants.STAGE_TWO_MOTOR_ID);
   }
 
-  public void moveStageOneMotor(double speed) {
+  public void runStageOneMotor(double speed) {
     stageOneMotor.set(speed);
   }
    
-  public void moveStageTwoMotor(double speed) {
+  public void runStageTwoMotor(double speed) {
     stageTwoMotor.set(speed);
   }
 
+  public void stopAll(){
+    stageOneMotor.set(0.0);
+    stageTwoMotor.set(0.0);
+  }
 
   @Override
   public void periodic() {
