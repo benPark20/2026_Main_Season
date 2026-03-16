@@ -17,12 +17,10 @@ import frc.robot.Constants;
 public class Intake extends frc.slicelibs.TalonFXPositionalSubsystem {
 
   private TalonFX rotationMotor;
-  private boolean active; // Tells whether or not intake is active
-  // TODO maybe change to a method?
-
 
   /** Creates a new Intake. */
   public Intake() {
+    // Initialize the Positional Subsystem and motors controlling it
     super(
       new int[] { Constants.IntakeConstants.EXTENDER_MOTOR_ID },
       new boolean[] { false },
@@ -31,10 +29,16 @@ public class Intake extends frc.slicelibs.TalonFXPositionalSubsystem {
       GravityTypeValue.Elevator_Static,
       Constants.IntakeConstants.POSITION_CONVERSION_FACTOR,
       Constants.IntakeConstants.VELOCITY_CONVERSION_FACTOR,
-      Constants.CTRE_CONFIGS.m_intakeConfigs
+      Constants.CTRE_CONFIGS.extenderConfigs
     );
     setEncoderPosition(0);
+    
+    // Non-positional motor for spinning the roller
     rotationMotor = new TalonFX(Constants.IntakeConstants.ROTATION_MOTOR_ID);
+
+    // Set motor configs for the roller motor
+    rotationMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.rollerConfigs);
+
   }
 
   /**

@@ -13,14 +13,17 @@ public class ToggleIntake extends Command {
 
   private Intake m_intake;
   private Indexer m_indexer;
-  
-  private enum State { EXTENDING, INTAKING, RETRACTING, DONE }
+
+  private enum State {
+    EXTENDING, INTAKING, RETRACTING, DONE
+  }
+
   private State state;
 
   /**
    * Creates a new intake.
    */
-  public ToggleIntake (Intake intake) {
+  public ToggleIntake(Intake intake) {
     m_intake = intake;
   }
 
@@ -67,6 +70,7 @@ public class ToggleIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+  
   }
 
   // Returns true when the command should end.

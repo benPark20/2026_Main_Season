@@ -147,6 +147,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.setYaw(0);
   }
 
+  public boolean isAtTargetPos() {
+    // TODO: implement
+    return true;
+  }
   
   @Override
   public void periodic() {

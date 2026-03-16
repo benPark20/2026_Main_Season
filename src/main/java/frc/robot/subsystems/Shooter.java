@@ -6,23 +6,16 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
-import frc.robot.ShooterCalculations;
-import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class Shooter extends SubsystemBase {
 
   private TalonFX pivotMotor, leftShooterMotor, rightShooterMotor;
-  //private Encoder pivotEncoder, leftEncoder, rightEncoder;
 
   private double targetSpeed, targetPosition;
 
@@ -34,75 +27,55 @@ public class Shooter extends SubsystemBase {
     rightShooterMotor = new TalonFX(Constants.ShooterConstants.RIGHT_SHOOTER_MOTOR_ID);
 
     // Set the motor configs.
+    pivotMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.pivotConfigs);
     leftShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterConfigs);
-    rightShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterRightConfigs);
+    rightShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterConfigs);
 
   }
 
-  /**
-   * Sets the flywheels to spin at a certain speed.
-   * @param speed The speed to set (a value between -1.0 and 1.0)
-   */
-  public void spinFlywheels(double speed){
+  // Set flywheels to a specific speed
+  public void spinFlywheels(double speed) {
     leftShooterMotor.set(speed);
-    //rightShooterMotor.set(speed);
+    rightShooterMotor.set(speed);
   }
 
-  /**
-   * Sets the pivot to a certain speed.
-   * @param speed The speed to set (a value between -1.0 and 1.0)
-   */
-  public void pivotShooter(double speed){
-    pivotMotor.set(speed);
+  // Move shooter hood to a position
+  public void pivotShooter(double rotations) {
+    pivotMotor.setPosition(rotations);
   }
 
-  /**
-   * Accelerates the flywheels to a certain speed.
-   * @param speed The speed to spin at in rotations per second.
-   */
-  public void speedUpFlywheels(double speed){
-    targetSpeed = speed;
+  // TODO replace with proper limelight based calculation (hopefully with SWIM)
+  public void calculate() {
     
-    VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
-
-    leftShooterMotor.setControl(request.withVelocity(speed));
-    rightShooterMotor.setControl(request.withVelocity(speed));
-
-    // TODO change the VelocityVoltage to be more streamlined.
-
   }
 
-  /**
-   * Set the shooter's pivot motor to a specific angle.
-   * @param position The position to set in rotations.
-   */
-  public void pivotShooterToPosition(double position){
-    targetPosition = position;
-
-    PositionVoltage request = new PositionVoltage(position); 
-
-    pivotMotor.setControl(request.withPosition(position)); 
-
+  public double getTargetSpeed() {
+    return targetSpeed;
   }
 
-  /**
-   * Check if the motor is at a specific speed.
-   * @param error How much error is allowed to be considered "at speed."
-   * @return Returns whether or not the motor is at speed.
-   */
-  public boolean atTargetSpeed(double error){
-    double currentSpeed = leftShooterMotor.getVelocity().getValueAsDouble();
-    currentSpeed += rightShooterMotor.getVelocity().getValueAsDouble() / 2;
-    if(Math.abs(targetSpeed - currentSpeed) >= error){
-      return true;
-    }
-    return false;
+  public double getTargetPosition() {
+    return targetPosition;
+  }
+  
+
+  public double getFlywheelSpeed() {
+    return (leftShooterMotor.getVelocity().getValueAsDouble() + rightShooterMotor.getVelocity().getValueAsDouble()) / 2;
   }
 
-  /**
-   * Determines if the hub is active (from WPILib website)
-   * @return Returns if the hub is active or not
-   */
+  public double getPivotPosition() {
+    return pivotMotor.getPosition().getValueAsDouble();
+  }
+
+  
+  public boolean atTargetSpeed() {
+    return Math.abs(targetSpeed - getFlywheelSpeed()) <= Constants.ShooterConstants.FLYWHEEL_RPM_ACCEPTABLE_ERROR;
+  }
+
+  public boolean atTargetPosition() {
+    return Math.abs(targetPosition - getPivotPosition()) <= (Constants.ShooterConstants.VERTICAL_AIM_ACCEPTABLE_ERROR * (Math.PI / 180));
+  }
+
+  // Determines if the hub is active
   public boolean isHubActive() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
     // If we have no alliance, we cannot be enabled, therefore no hub.
@@ -135,7 +108,7 @@ public class Shooter extends SubsystemBase {
       }
     }
 
-    // Shift was is active for blue if red won auto, or red if blue won auto.
+    // Shift is active for blue if red won auto, or red if blue won auto.
     boolean shift1Active = switch (alliance.get()) {
       case Red -> !redInactiveFirst;
       case Blue -> redInactiveFirst;
@@ -162,10 +135,7 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  /**
-   * Determines if the hub is 4 seconds from active (from WPILib website)
-   * @return Returns if the hub is 4 seconds from active or not
-   */
+  // Determines if the hub is 4 seconds from active
   public boolean isHubAlmostActive() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
     // If we have no alliance, we cannot be enabled, therefore no hub.

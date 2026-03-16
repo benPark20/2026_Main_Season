@@ -5,100 +5,94 @@
 package frc.slicelibs.configs;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.robot.Constants;
 
 
-/** Add your docs here. */
 public class CTREConfigs {
 
-    /* Initiating the different TalonFX configurators */
     public final TalonFXConfiguration m_swerveDriveConfigs = new TalonFXConfiguration();
     public final TalonFXConfiguration m_swerveTurnConfigs = new TalonFXConfiguration();
 
     public final TalonFXConfiguration shooterConfigs = new TalonFXConfiguration();
-    public final TalonFXConfiguration shooterRightConfigs = new TalonFXConfiguration();
+    public final TalonFXConfiguration pivotConfigs = new TalonFXConfiguration();
 
-    public final TalonFXConfiguration m_intakeConfigs = new TalonFXConfiguration();
+
+    public final TalonFXConfiguration extenderConfigs = new TalonFXConfiguration();
+    public final TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
+
+    public final TalonFXConfiguration indexerConfigs  = new TalonFXConfiguration();
 
 
     public CTREConfigs(){
-
-
-        ////////////////////////////
-        /// Swerve Drive Configs ///
-        ////////////////////////////
-        
-        var swerveDrivePIDs = m_swerveDriveConfigs.Slot0;
-        swerveDrivePIDs.kP = Constants.DriveConstants.DRIVE_KP;
-        swerveDrivePIDs.kI = Constants.DriveConstants.DRIVE_KI;
-        swerveDrivePIDs.kD = Constants.DriveConstants.DRIVE_KD;
-
-        
-        var swerveDriveCurrent = m_swerveDriveConfigs.CurrentLimits;
-        swerveDriveCurrent.StatorCurrentLimit = Constants.DriveConstants.DRIVE_STATOR_CURRENT_LIMIT;//80;
-        swerveDriveCurrent.SupplyCurrentLimit = Constants.DriveConstants.DRIVE_SUPPLY_CURRENT_LIMIT;//40;
-        
-
-
-        //////////////////////////
-        /// Swerve Turn Configs //
-        //////////////////////////
-        
-        var swerveTurnPIDs = m_swerveTurnConfigs.Slot0;
-        swerveTurnPIDs.kP = Constants.DriveConstants.TURN_KP;
-        swerveTurnPIDs.kI = Constants.DriveConstants.TURN_KI;
-        swerveTurnPIDs.kD = Constants.DriveConstants.TURN_KD;
-
-        
-        var swerveTurnCurrent = m_swerveTurnConfigs.CurrentLimits;
-        swerveTurnCurrent.StatorCurrentLimit = Constants.DriveConstants.TURN_STATOR_CURRENT_LIMIT;//40;
-        swerveTurnCurrent.SupplyCurrentLimit = Constants.DriveConstants.TURN_SUPPLY_CURRENT_LIMIT;//30;
-
-
-        m_swerveTurnConfigs.Feedback.SensorToMechanismRatio = Constants.DriveConstants.ANGLE_GEAR_RATIO;
-        m_swerveTurnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
-
-        //////////////////////////
-        /// Shooter Configs ////
-        //////////////////////////
-
-        /* Shooter PIDs */
-        var shooterPID = shooterConfigs.Slot0;
-        shooterPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
-        shooterPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
-        shooterPID.kD = Constants.ShooterConstants.FLYWHEEL_KD;
-        //shooterPID.kS =
-        //shooterPID.kV = 510; //TODO tune
-
-
-        var shooterLimits = shooterConfigs.CurrentLimits;
-
-
-        var shooterRightPID = shooterRightConfigs.Slot0;
-        shooterRightPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
-        shooterRightPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
-        shooterRightPID.kD = Constants.ShooterConstants.FLYWHEEL_KD;
-
-        var shooterRight = shooterRightConfigs.MotorOutput;
-        shooterRight.Inverted = InvertedValue.Clockwise_Positive;
-
-        //////////////////////
-        /// Intake Configs ///
-        //////////////////////
-        
-        var intakePID = m_intakeConfigs.Slot0;
-        // TODO change PIDs
-        intakePID.kP = 0.2;
-        intakePID.kI = 0;
-        intakePID.kD = 0;
-
-        var intakeOutput = m_intakeConfigs.MotorOutput;
-        intakeOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-
+        configureSwerve();
+        configureShooter();
+        configureIntake();
+        configureIndexer();
     }
     
+    private void configureSwerve() {
+        // Swerve Drive Motor Configurations
+        m_swerveDriveConfigs.Slot0.kP = Constants.DriveConstants.DRIVE_KP;
+        m_swerveDriveConfigs.Slot0.kI = Constants.DriveConstants.DRIVE_KI;
+        m_swerveDriveConfigs.Slot0.kD = Constants.DriveConstants.DRIVE_KD;
+        m_swerveDriveConfigs.Slot0.kS = Constants.DriveConstants.DRIVE_KS;
+        m_swerveDriveConfigs.Slot0.kV = Constants.DriveConstants.DRIVE_KV;
+        m_swerveDriveConfigs.CurrentLimits.StatorCurrentLimit = Constants.DriveConstants.DRIVE_STATOR_CURRENT_LIMIT;
+        m_swerveDriveConfigs.CurrentLimits.SupplyCurrentLimit = Constants.DriveConstants.DRIVE_SUPPLY_CURRENT_LIMIT;
+        m_swerveDriveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_swerveDriveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        // Swerve Turn Motor Configurations
+        m_swerveTurnConfigs.Slot0.kP = Constants.DriveConstants.DRIVE_KP;
+        m_swerveTurnConfigs.Slot0.kI = Constants.DriveConstants.DRIVE_KI;
+        m_swerveTurnConfigs.Slot0.kD = Constants.DriveConstants.DRIVE_KD;
+        m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimit = Constants.DriveConstants.TURN_STATOR_CURRENT_LIMIT;
+        m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimit = Constants.DriveConstants.TURN_SUPPLY_CURRENT_LIMIT;
+        m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    }
+
+    private void configureShooter() {
+        // Flywheel motor configurations
+        shooterConfigs.Slot0.kP = Constants.ShooterConstants.FLYWHEEL_KP;
+        shooterConfigs.Slot0.kI = Constants.ShooterConstants.FLYWHEEL_KI;
+        shooterConfigs.Slot0.kD = Constants.ShooterConstants.FLYWHEEL_KD;
+        shooterConfigs.Slot0.kS = Constants.ShooterConstants.FLYWHEEL_KS;
+        shooterConfigs.Slot0.kV = Constants.ShooterConstants.FLYWHEEL_KV;
+        shooterConfigs.Feedback.SensorToMechanismRatio = Constants.ShooterConstants.FLYWHEEL_GEAR_RATIO;
+        shooterConfigs.CurrentLimits.StatorCurrentLimit = Constants.ShooterConstants.FLYWHEEL_STATOR_CURRENT_LIMIT;
+        shooterConfigs.CurrentLimits.SupplyCurrentLimit = Constants.ShooterConstants.FLYWHEEL_SUPPLY_CURRENT_LIMIT;
+        shooterConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+        shooterConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        // Pivot motor configurations
+        pivotConfigs.Slot0.kP = Constants.ShooterConstants.AIM_KP;
+        pivotConfigs.Slot0.kI = Constants.ShooterConstants.AIM_KI;
+        pivotConfigs.Slot0.kD = Constants.ShooterConstants.AIM_KD;
+        pivotConfigs.Feedback.SensorToMechanismRatio = Constants.ShooterConstants.PIVOT_GEAR_RATIO;
+    }
+
+    private void configureIntake() {
+        // Extender motor configurations
+        extenderConfigs.Slot0.kP = Constants.IntakeConstants.EXTENDER_KP;
+        extenderConfigs.Slot0.kI = Constants.IntakeConstants.EXTENDER_KI;
+        extenderConfigs.Slot0.kD = Constants.IntakeConstants.EXTENDER_KD;
+        extenderConfigs.Slot0.kG = Constants.IntakeConstants.EXTENDER_KG;
+        extenderConfigs.Feedback.SensorToMechanismRatio = Constants.IntakeConstants.EXTENDER_RATIO;
+        extenderConfigs.CurrentLimits.StatorCurrentLimit = Constants.IntakeConstants.EXTENDER_STATOR_CURRENT_LIMIT;
+        extenderConfigs.CurrentLimits.SupplyCurrentLimit = Constants.IntakeConstants.EXTENDER_SUPPLY_CURRENT_LIMIT;
+
+        // Roller motor configurations
+        rollerConfigs.Feedback.SensorToMechanismRatio = Constants.IntakeConstants.ROLLER_GEAR_RATIO;
+        rollerConfigs.CurrentLimits.StatorCurrentLimit = Constants.IntakeConstants.ROLLER_STATOR_CURRENT_LIMIT;
+        rollerConfigs.CurrentLimits.SupplyCurrentLimit = Constants.IntakeConstants.ROLLER_SUPPLY_CURRENT_LIMIT;
+    }
+
+    private void configureIndexer() {
+        // Indexer motors configurations
+        indexerConfigs.CurrentLimits.StatorCurrentLimit = Constants.IndexerConstants.INDEXER_STATOR_CURRENT_LIMIT;
+        indexerConfigs.CurrentLimits.SupplyCurrentLimit = Constants.IndexerConstants.INDEXER_SUPPLY_CURRENT_LIMIT;
+    }
 
 }

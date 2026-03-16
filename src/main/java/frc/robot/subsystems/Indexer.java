@@ -17,8 +17,14 @@ public class Indexer extends SubsystemBase {
 
   /** Creates a new Indexer. */
   public Indexer() {
+    // Define the motors
     stageOneMotor = new TalonFX(Constants.IndexerConstants.STAGE_ONE_MOTOR_ID);
     stageTwoMotor = new TalonFX(Constants.IndexerConstants.STAGE_TWO_MOTOR_ID);
+    
+    // Set the motor configs
+    stageOneMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.indexerConfigs);
+    stageTwoMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.indexerConfigs);
+
   }
 
   public void runStageOneMotor(double speed) {

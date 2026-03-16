@@ -29,6 +29,10 @@ public final class Constants {
     public static final int STAGE_TWO_MOTOR_ID = 1;
 
     public static final double STAGE_ONE_INTAKE_SPEED = 0.5;
+    public static final double STAGE_TWO_INTAKE_SPEED = 0.5;
+
+    public static final int INDEXER_STATOR_CURRENT_LIMIT = 40;
+    public static final int INDEXER_SUPPLY_CURRENT_LIMIT = 30;
   }
 
   public static class DriveConstants {
@@ -85,16 +89,18 @@ public final class Constants {
     public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
 
 
-    //TODO: Figure out PIDs for both Drive Motors and Turn Motors
+    /* TODO: Figure out PIDs for both Drive Motors and Turn Motors */
     public static final double DRIVE_KP = .05;
     public static final double DRIVE_KI = 0;
     public static final double DRIVE_KD = 0;
+    public static final double DRIVE_KS = 0.0;
+    public static final double DRIVE_KV = 0.12;
 
     public static final double TURN_KP = 55;
     public static final double TURN_KI = 0;
     public static final double TURN_KD = 0;
 
-    /* Drivetrain Current Limits */ //TODO maybe tune current limits
+    /* Drivetrain Current Limits */
     public static final double DRIVE_STATOR_CURRENT_LIMIT = 80;
     public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 40;
 
@@ -119,8 +125,10 @@ public final class Constants {
     public static final double EXTENDER_KP = 0.2;
     public static final double EXTENDER_KI = 0.0;
     public static final double EXTENDER_KD = 0.0;
-    public static final double EXTENDER_KG = 0.0; //feedforward value
-    public static final double EXTENDER_RATIO = 50/9; //5.55 repeating
+    public static final double EXTENDER_KG = 0.0; // FF for gravity, most likely don't need this
+    public static final double EXTENDER_RATIO = 50/9; // 5.55 repeating
+    public static final int EXTENDER_STATOR_CURRENT_LIMIT = 60;
+    public static final int EXTENDER_SUPPLY_CURRENT_LIMIT = 40;
     public static final double POSITION_CONVERSION_FACTOR = (0.0254 * Math.PI) * EXTENDER_RATIO; //(pitch diameter of pinion * pi) * ratio
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR; //meters per second
 
@@ -131,11 +139,14 @@ public final class Constants {
     // Roller motor constants
     public static final double ROLLER_SPEED = 0.8;
     public static final double ROLLER_RETRACT_SPEED = 0.0;
+    public static final double ROLLER_GEAR_RATIO = 2.0;
+    public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
+    public static final int ROLLER_SUPPLY_CURRENT_LIMIT = 30;
   }
   
   public static class ShooterConstants {
     
-    public static final int PIVOT_MOTOR_ID = 4;
+    public static final int PIVOT_MOTOR_ID = 4;    
     public static final int LEFT_SHOOTER_MOTOR_ID = 3;
     public static final int RIGHT_SHOOTER_MOTOR_ID = 2;
 
@@ -143,10 +154,19 @@ public final class Constants {
     public static final double FLYWHEEL_KP = 0.05;
     public static final double FLYWHEEL_KI = 0.0;
     public static final double FLYWHEEL_KD = 0.0;
+    public static final double FLYWHEEL_KS = 0.0;
+    public static final double FLYWHEEL_KV = 0.12;
+    public static final int FLYWHEEL_STATOR_CURRENT_LIMIT = 80;
+    public static final int FLYWHEEL_SUPPLY_CURRENT_LIMIT = 60;
+    
+    public static final double FLYWHEEL_GEAR_RATIO = 1.4;
+    public static final double PIVOT_GEAR_RATIO = 4.75 * 16.5;
 
     public static final double AIM_KP = 0.05;
     public static final double AIM_KI = 0.0;
     public static final double AIM_KD = 0.0;
+    public static final int PIVOT_STATOR_CURRENT_LIMIT = 60;
+    public static final int PIVOT_SUPPLY_CURRENT_LIMIT = 40;
 
     public static final double SHOOTER_STOW = 0.0; // The angle at which the shooter is considered stowed
 

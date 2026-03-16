@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.Shooter;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +24,7 @@ public class PivotShooter extends Command {
       double distance = ShooterCalculations.distanceToHub();
       try {
         result = ShooterCalculations.calculateShooterTrajectory(distance);
-        mainShooter.pivotShooterToPosition(result[0] * 2 * Math.PI);
+        mainShooter.pivotShooter(result[0] * 2 * Math.PI);
        } catch (IndexOutOfBoundsException e) {
         result[0] = 0;
         result[1] = 0;
