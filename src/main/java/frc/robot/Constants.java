@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.Interpolatable;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.slicelibs.configs.CTREConfigs;
@@ -126,7 +129,7 @@ public final class Constants {
     public static final double EXTENDER_KI = 0.0;
     public static final double EXTENDER_KD = 0.0;
     public static final double EXTENDER_KG = 0.0; // FF for gravity, most likely don't need this
-    public static final double EXTENDER_RATIO = 50/9; // 5.55 repeating
+    public static final double EXTENDER_RATIO = 50.0 / 9.0; // 5.55 repeating
     public static final int EXTENDER_STATOR_CURRENT_LIMIT = 60;
     public static final int EXTENDER_SUPPLY_CURRENT_LIMIT = 40;
     public static final double POSITION_CONVERSION_FACTOR = (0.0254 * Math.PI) * EXTENDER_RATIO; //(pitch diameter of pinion * pi) * ratio
@@ -161,40 +164,51 @@ public final class Constants {
     
     public static final double FLYWHEEL_GEAR_RATIO = 1.4;
     public static final double PIVOT_GEAR_RATIO = 4.75 * 16.5;
+    public static final double POSITION_CONVERSION_FACTOR = 1.0 / PIVOT_GEAR_RATIO; // Degrees
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR; // Degrees per Second
 
     public static final double AIM_KP = 0.05;
     public static final double AIM_KI = 0.0;
     public static final double AIM_KD = 0.0;
+    public static final double AIM_KG = 0.01; //gravity feedforward
     public static final int PIVOT_STATOR_CURRENT_LIMIT = 60;
     public static final int PIVOT_SUPPLY_CURRENT_LIMIT = 40;
 
-    public static final double SHOOTER_STOW = 0.0; // The angle at which the shooter is considered stowed
+    public static final double SHOOTER_STOW = 12.0; // The angle at which the shooter is considered stowed
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 10.0; //rpm
+    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = .1; //degrees
+    //TODO: Populate table with real data (placeholder example data right now)
+    public static final InterpolatingTreeMap<Double, FullShooterParams> SHOOTER_MAP = new InterpolatingTreeMap<>(MathUtil::inverseInterpolate, FullShooterParams::interpolate);
+    static {
+      SHOOTER_MAP.put(0.5, new FullShooterParams(2800.0, 12.0, 0.38));
+      SHOOTER_MAP.put(1.0, new FullShooterParams(3100.0, 14.0, 0.45));
+      SHOOTER_MAP.put(1.5, new FullShooterParams(3400.0, 17.0, 0.52));
+      SHOOTER_MAP.put(2.0, new FullShooterParams(3650.0, 20.0, 0.60));
+      SHOOTER_MAP.put(2.5, new FullShooterParams(3900.0, 23.0, 0.68));
+      SHOOTER_MAP.put(3.0, new FullShooterParams(4100.0, 24.0, 0.76));
+      SHOOTER_MAP.put(3.5, new FullShooterParams(4350.0, 26.0, 0.85));
+      SHOOTER_MAP.put(4.0, new FullShooterParams(4550.0, 29.0, 0.94));
+      SHOOTER_MAP.put(4.5, new FullShooterParams(4700.0, 31.0, 1.00));
+      SHOOTER_MAP.put(5.0, new FullShooterParams(5000.0, 33.0, 1.10));
+    }
 
-    //TODO: get actual shooter rpm
-    public static final double SHOOTER_RPM = 60;
+    public record FullShooterParams(double rpm, double hoodAngle, double tof) implements Interpolatable<FullShooterParams> {
+        @Override
+        public FullShooterParams interpolate(FullShooterParams endValue, double t) {
+            return new FullShooterParams(
+                rpm + (endValue.rpm - rpm) * t,
+                hoodAngle + (endValue.hoodAngle - hoodAngle) * t,
+                tof + (endValue.tof - tof) * t
+            );
+        }
+    }
+
 
     // Robot dimensions
     public static final double SHOOTER_HEIGHT = 1.7891; // Feet
     public static final double FLYWHEEL_RADIUS = 0.1667; // Feet
     public static final double LIMELIGHT_ANGLE = 72.5; // Degrees
     public static final double LIMELIGHT_HEIGHT = 1.525; // Feet
-
-    // Maximums and minimums (Tune these)
-    public static final double MAX_FLYWHEEL_VELOCITY = 35; // Feet per second
-    public static final double MIN_FLYWHEEL_VELOCITY = 10; // Feet per second
-    public static final double MAX_SHOOTER_ANGLE = 1.36136; // Radians
-    public static final double MIN_SHOOTER_ANGLE = 0.994838; // Radians
-
-    // Errors //
-    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the flywheel RPM
-    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
-    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
-    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
-    
-    // Optimization for Maths (Tune these)
-    public static final double SHOOTER_STEP = 0.2;
-    public static final int SHOOTER_DIE_TIME = 100000; // Maximum number of optimizations allowed
-    public static final double H = 0.0000001;
   }
 
   public static class FieldConstants {

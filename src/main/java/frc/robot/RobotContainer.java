@@ -15,7 +15,7 @@ import frc.robot.commands.Shooter.ShootAtHub;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.drivetrain.DriveSubsystem;
+import frc.robot.subsystems.Drivetrain.DriveSubsystem;
 
 import java.util.function.ObjIntConsumer;
 
@@ -35,6 +35,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+@SuppressWarnings("unused")
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

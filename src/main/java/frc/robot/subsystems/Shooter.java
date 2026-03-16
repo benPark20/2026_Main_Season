@@ -7,13 +7,18 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.ShooterConstants.FullShooterParams;
+import frc.slicelibs.TalonFXPositionalSubsystem;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends TalonFXPositionalSubsystem {
 
   private TalonFX pivotMotor, leftShooterMotor, rightShooterMotor;
 
@@ -21,16 +26,26 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    // Define the motors for pivoting the shooter and the flywheels.
-    pivotMotor = new TalonFX(Constants.ShooterConstants.PIVOT_MOTOR_ID);
+    
+    super(
+      new int[] { Constants.ShooterConstants.PIVOT_MOTOR_ID },
+      new boolean[] { true },
+      Constants.ShooterConstants.AIM_KP, Constants.ShooterConstants.AIM_KI, Constants.ShooterConstants.AIM_KD, Constants.ShooterConstants.AIM_KG,
+      Constants.ShooterConstants.PIVOT_GEAR_RATIO,
+      GravityTypeValue.Arm_Cosine,
+      Constants.ShooterConstants.POSITION_CONVERSION_FACTOR,
+      Constants.ShooterConstants.VELOCITY_CONVERSION_FACTOR,
+      Constants.CTRE_CONFIGS.pivotConfigs
+    );
+    setEncoderPosition(Constants.ShooterConstants.SHOOTER_STOW); // 12 degree from ground stow angle
+
+    // Define the motors for spinning the flywheels.
     leftShooterMotor = new TalonFX(Constants.ShooterConstants.LEFT_SHOOTER_MOTOR_ID);
     rightShooterMotor = new TalonFX(Constants.ShooterConstants.RIGHT_SHOOTER_MOTOR_ID);
 
     // Set the motor configs.
-    pivotMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.pivotConfigs);
     leftShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterConfigs);
     rightShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterConfigs);
-
   }
 
   // Set flywheels to a specific speed
@@ -40,30 +55,43 @@ public class Shooter extends SubsystemBase {
   }
 
   // Move shooter hood to a position
-  public void pivotShooter(double rotations) {
-    pivotMotor.setPosition(rotations);
+  public void pivotShooter(double angle) {
+    setPosition(angle);
   }
 
-  // TODO replace with proper limelight based calculation (hopefully with SWIM)
-  public void calculate() {
-    
+  public double getHorizontalVelocity(double distance) {
+    FullShooterParams params = Constants.ShooterConstants.SHOOTER_MAP.get(distance);
+    return distance / params.tof();
   }
 
-  public double getTargetSpeed() {
-    return targetSpeed;
-  }
+  public void calculateShot(double distance, double requiredVelocity) {
+    FullShooterParams baseline = Constants.ShooterConstants.SHOOTER_MAP.get(distance);
+    double baselineVelocity = distance / baseline.tof();
+    double velocityRatio = requiredVelocity / baselineVelocity;
 
-  public double getTargetPosition() {
-    return targetPosition;
+    // Split the correction: sqrt gives equal "contribution" from each
+    double rpmFactor = Math.sqrt(velocityRatio);
+    double hoodFactor = Math.sqrt(velocityRatio);
+
+    // Apply RPM scaling
+    double adjustedRpm = baseline.rpm() * rpmFactor;
+
+    // Apply hood adjustment (changes horizontal component)
+    double totalVelocity = baselineVelocity / Math.cos(Math.toRadians(baseline.hoodAngle()));
+    double targetHorizFromHood = baselineVelocity * hoodFactor;
+    double ratio = MathUtil.clamp(targetHorizFromHood / totalVelocity, 0.0, 1.0);
+    double adjustedHood = Math.toDegrees(Math.acos(ratio));
+
+    targetSpeed = adjustedRpm;
+    targetPosition = adjustedHood;
   }
-  
 
   public double getFlywheelSpeed() {
     return (leftShooterMotor.getVelocity().getValueAsDouble() + rightShooterMotor.getVelocity().getValueAsDouble()) / 2;
   }
 
   public double getPivotPosition() {
-    return pivotMotor.getPosition().getValueAsDouble();
+    return getPositions()[0];
   }
 
   
