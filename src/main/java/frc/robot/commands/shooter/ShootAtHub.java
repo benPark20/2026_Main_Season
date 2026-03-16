@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.drivetrain.DriveSubsystem;
+import frc.robot.subsystems.Drivetrain.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -50,7 +50,7 @@ public class ShootAtHub extends Command {
 
     switch (state) {
       case PRESHOOT:
-        m_Shooter.spinFlywheels(m_Shooter.getTargetSpeed());
+        m_Shooter.spinFlywheels(m_Shooter.getHorizontalVelocity(0.5)); //TEMPORARY JUST TO GET IT TO BUILD!!!
         m_Shooter.pivotShooter(m_Shooter.getTargetPosition());
         // Drivetrain method to aim towards hub
         
