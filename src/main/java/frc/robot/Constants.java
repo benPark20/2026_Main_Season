@@ -23,7 +23,14 @@ import frc.slicelibs.configs.CTREConfigs;
  */
 public final class Constants {
 
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
+
+  public static enum Mode {
+    REAL,
+    SIM,
+    REPLAY
+  }
 
 
   public static class IndexerConstants {
@@ -39,24 +46,24 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    
+
     /* Swerve Physics */
-    public static final double TRACK_WIDTH = Units.inchesToMeters(22.0); // TODO: Find track width and wheel base length
+    public static final double TRACK_WIDTH = Units.inchesToMeters(22.0);
     public static final double WHEEL_BASE = Units.inchesToMeters(23.1782);
     public static final double DRIVE_BASE_RADIUS = Math.hypot(WHEEL_BASE / 2, TRACK_WIDTH / 2);
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
     public static final double MASS = 65; // TODO: Find mass (kg)
     public static final double MOMENT_OF_INERTIA = 6; // TODO: Find MOI (kg*m^2)
-    public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.5; // Injection molded TPU Tread
+    public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.5;
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
-      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
-      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
-      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
-      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
+      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),   // Front left
+      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),  // Front right
+      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right
+      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left
 
-    /* MOTOR IDS */
+    /* Motor IDs */
     public static final int FRONT_LEFT_DRIVE_ID = 17;
     public static final int FRONT_RIGHT_DRIVE_ID = 13;
     public static final int BACK_LEFT_DRIVE_ID = 15;
@@ -66,8 +73,8 @@ public final class Constants {
     public static final int FRONT_RIGHT_TURN_ID = 12;
     public static final int BACK_LEFT_TURN_ID = 14;
     public static final int BACK_RIGHT_TURN_ID = 10;
-    
-    /* Encoder IDs */
+
+    /* CANcoder IDs */
     public static final int FRONT_LEFT_ENCODER_ID = 23;
     public static final int FRONT_RIGHT_ENCODER_ID = 21;
     public static final int BACK_LEFT_ENCODER_ID = 20;
@@ -75,29 +82,66 @@ public final class Constants {
 
     public static final int GYRO_ID = 24;
 
-    /* Drivetrain Gear Ratios */
+    /* Gear Ratios */
     public static final double DRIVE_GEAR_RATIO = (5.79 / 1.0); // 5.79:1
     public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
 
-
-    /* TODO: Figure out PIDs for both Drive Motors and Turn Motors */
-    public static final double DRIVE_KP = .05;
-    public static final double DRIVE_KI = 0;
-    public static final double DRIVE_KD = 0;
+    /* Drive Motor PID / FF */
+    public static final double DRIVE_KP = 0.05;
+    public static final double DRIVE_KI = 0.0;
+    public static final double DRIVE_KD = 0.0;
     public static final double DRIVE_KS = 0.0;
     public static final double DRIVE_KV = 0.12;
 
-    public static final double TURN_KP = 55;
-    public static final double TURN_KI = 0;
-    public static final double TURN_KD = 0;
+    /* Turn Motor PID */
+    public static final double TURN_KP = 55.0;
+    public static final double TURN_KI = 0.0;
+    public static final double TURN_KD = 0.0;
 
-    /* Drivetrain Current Limits */
+    /* Current Limits */
     public static final double DRIVE_STATOR_CURRENT_LIMIT = 80;
     public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 40;
-
     public static final double TURN_STATOR_CURRENT_LIMIT = 40;
     public static final double TURN_SUPPLY_CURRENT_LIMIT = 30;
-    
+
+    /* Motor Inverts */
+    public static final boolean DRIVE_MOTOR_INVERT = false;
+    public static final boolean TURN_MOTOR_INVERT = true;
+
+    /* CANcoder direction */
+    public static final com.ctre.phoenix6.signals.SensorDirectionValue ABSOLUTE_ENCODER_INVERT =
+        com.ctre.phoenix6.signals.SensorDirectionValue.CounterClockwise_Positive;
+
+    /* Velocity limits */
+    public static final double MAX_LINEAR_VELOCITY = 4.5; // m/s
+    public static final double MAX_ANGULAR_VELOCITY = 5.279; // rad/s
+
+    /* PathPlanner */
+    public static final com.pathplanner.lib.path.PathConstraints PATH_CONSTRAINTS =
+        new com.pathplanner.lib.path.PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
+    public static final double TRANSLATION_KP = 4.5;
+    public static final double ROTATION_KP = 1.0;
+
+    /* Per-module constants (drive ID, turn ID, CANcoder ID, angle offset) */
+    public static final frc.slicelibs.configs.SwerveModuleConstants FRONT_LEFT_MODULE =
+        new frc.slicelibs.configs.SwerveModuleConstants(
+            FRONT_LEFT_DRIVE_ID, FRONT_LEFT_TURN_ID, FRONT_LEFT_ENCODER_ID,
+            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+
+    public static final frc.slicelibs.configs.SwerveModuleConstants FRONT_RIGHT_MODULE =
+        new frc.slicelibs.configs.SwerveModuleConstants(
+            FRONT_RIGHT_DRIVE_ID, FRONT_RIGHT_TURN_ID, FRONT_RIGHT_ENCODER_ID,
+            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+
+    public static final frc.slicelibs.configs.SwerveModuleConstants BACK_RIGHT_MODULE =
+        new frc.slicelibs.configs.SwerveModuleConstants(
+            BACK_RIGHT_DRIVE_ID, BACK_RIGHT_TURN_ID, BACK_RIGHT_ENCODER_ID,
+            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+
+    public static final frc.slicelibs.configs.SwerveModuleConstants BACK_LEFT_MODULE =
+        new frc.slicelibs.configs.SwerveModuleConstants(
+            BACK_LEFT_DRIVE_ID, BACK_LEFT_TURN_ID, BACK_LEFT_ENCODER_ID,
+            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
 
   }
 

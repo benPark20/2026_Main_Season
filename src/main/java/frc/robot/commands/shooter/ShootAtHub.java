@@ -42,7 +42,7 @@ public class ShootAtHub extends Command {
   @Override
   public void execute() {
     
-    if (m_Shooter.atTargetSpeed() && m_Shooter.atTargetPosition() && m_Drivetrain.isAtTargetPos()) {
+    if (m_Shooter.atTargetSpeed() && m_Shooter.atTargetPosition() && m_Drivetrain.atTargetPose()) {
       state = State.SHOOTING;
     } else {
       state = State.PRESHOOT;

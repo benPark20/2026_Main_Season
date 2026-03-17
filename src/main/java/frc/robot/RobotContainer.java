@@ -1,143 +1,146 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import java.util.Set;
+
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import frc.robot.commands.Drivetrain.DriveCommand;
+import frc.robot.commands.Drivetrain.ResetFieldOrientedHeading;
+import frc.robot.commands.Drivetrain.RunDutyCycleCommand;
 import frc.robot.commands.Indexer.SpinStageOne;
 import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.commands.Intake.OscillateIntake;
 import frc.robot.commands.Intake.ToggleIntake;
 import frc.robot.commands.Shooter.ShootAtHub;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Drivetrain.Drivetrain;
-
-import java.util.function.ObjIntConsumer;
-
-import org.ejml.simple.AutomaticSimpleMatrixConvert;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.StadiaController.Button;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
+import frc.robot.subsystems.Drivetrain.RealSwerveModuleIO;
+import frc.robot.subsystems.Drivetrain.SimSwerveModuleIO;
+import frc.robot.subsystems.Drivetrain.SwerveModuleIO;
 
-@SuppressWarnings("unused")
-
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
 
-  /*  Controllers */
-  private final XboxController m_driverController = Buttons.controller1;
-  //private final XboxController m_operatorController = Buttons.controller2;
+  private final XboxController driverController = Buttons.controller1;
 
-  /* Drive Subsystem */
-  private final Drivetrain m_robotDrive = new Drivetrain();
+  // ==========================
+  // Subsystems
+  // ==========================
 
-  /*  Intake Subsystem & Commands */
-  private final Intake m_Intake =  new Intake();
+  public final Drivetrain m_drivetrain;
+  public final Intake m_Intake;
+  public final Indexer m_Indexer;
+  public final Shooter m_Shooter;
 
-  private final ToggleIntake m_ToggleIntake = new ToggleIntake(m_Intake);
-  private final OscillateIntake m_OscillateIntake = new OscillateIntake(m_Intake);
+  // ==========================
+  // Commands
+  // ==========================
 
-  /* Indexer Subsystem & Commands */
+  /* Drivetrain */
+  public final DriveCommand m_swerveDriveOpenLoop;
+  public final DriveCommand m_swerveDriveClosedLoop;
+  public final RunDutyCycleCommand m_driveDutyCycle;
+  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
+  public final Command m_sysIDDriveRoutine;
 
-  private final Indexer m_Indexer = new Indexer();
-  private final SpinStageOne m_spinStageOne = new SpinStageOne(m_Indexer, 0.2);
-  private final SpinStageTwo m_spinStageTwo = new SpinStageTwo(m_Indexer, 0.2);
+  /* Intake */
+  public final ToggleIntake m_ToggleIntake;
+  public final OscillateIntake m_OscillateIntake;
 
-  /* Shooter Subsystem & Commands */
+  /* Indexer */
+  public final SpinStageOne m_spinStageOne;
+  public final SpinStageTwo m_spinStageTwo;
 
-  private final Shooter m_Shooter = new Shooter();
-  private final ShootAtHub m_ShootAtHub = new ShootAtHub(m_Shooter, m_Indexer);
+  /* Shooter */
+  public final ShootAtHub m_ShootAtHub;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    /*
-    * TODO figure out how to ready shooter 4 secs before active shift
-    Trigger preFire = new Trigger(() -> m_Shooter.isHubAlmostActive());
-    preFire.onTrue(m_ReadyShooter);
-    */
-   // m_chooser.setDefaultOption("Simple Auto", autoCommand);
-   // m_ResetGyro.onTrue(new RunCommand(() -> m_robotDrive.resetGyro(), m_robotDrive));
 
-    
+    // ==========================
+    // Subsystems
+    // ==========================
 
-    // Configure the trigger bindings
+    switch (Constants.ADVANTAGE_KIT_MODE) {
+      case REAL:
+        m_drivetrain = new Drivetrain(
+            new RealSwerveModuleIO(Constants.DriveConstants.FRONT_LEFT_MODULE),
+            new RealSwerveModuleIO(Constants.DriveConstants.FRONT_RIGHT_MODULE),
+            new RealSwerveModuleIO(Constants.DriveConstants.BACK_RIGHT_MODULE),
+            new RealSwerveModuleIO(Constants.DriveConstants.BACK_LEFT_MODULE));
+        break;
+      case SIM:
+        m_drivetrain = new Drivetrain(
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO());
+        break;
+      default:
+        m_drivetrain = new Drivetrain(
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {});
+        break;
+    }
+
+    m_Intake  = new Intake();
+    m_Indexer = new Indexer();
+    m_Shooter = new Shooter();
+
+    // ==========================
+    // Commands
+    // ==========================
+
+    /* Drivetrain */
+    m_swerveDriveOpenLoop       = new DriveCommand(m_drivetrain, driverController, true);
+    m_swerveDriveClosedLoop     = new DriveCommand(m_drivetrain, driverController, false);
+    m_driveDutyCycle            = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
+    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    m_sysIDDriveRoutine         = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+
+    /* Intake */
+    m_ToggleIntake    = new ToggleIntake(m_Intake);
+    m_OscillateIntake = new OscillateIntake(m_Intake);
+
+    /* Indexer */
+    m_spinStageOne = new SpinStageOne(m_Indexer, 0.2);
+    m_spinStageTwo = new SpinStageTwo(m_Indexer, 0.2);
+
+    /* Shooter */
+    m_ShootAtHub = new ShootAtHub(m_Shooter, m_Indexer);
+
     configureBindings();
 
-    // Configure default commands
-   m_robotDrive.setDefaultCommand(
-    //     // The left stick controls translation of the robot.
-    //     // Turning is controlled by the X axis of the right stick.
-          new RunCommand(  
-            () -> m_robotDrive.drive(
-              MathUtil.applyDeadband(m_driverController.getRawAxis(1), OIConstants.kDriveDeadband), //translation
-              MathUtil.applyDeadband(m_driverController.getRawAxis(0), OIConstants.kDriveDeadband), //translation
-              MathUtil.applyDeadband(m_driverController.getRawAxis(4), OIConstants.kDriveDeadband), //rotation
-              true),
-            m_robotDrive)
-  );
-
-  //new RunCommand( () -> m_robotDrive.setDutyCycle(0,.1),
-  //    m_robotDrive));
-
-  //m_Shooter.setDefaultCommand(m_Shoot);
-
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
 
-    //Buttons.controller1_leftBumper.whileTrue(m_IntakeFuelTimed); TODO uncomment if needed
-    Buttons.controller1_RightTrigger.whileTrue(m_ShootAtHub);
-    Buttons.controller1_rightBumper.whileTrue(m_ShootAtHub);
+    // ================
+    // Driver Controls
+    // ================
 
+    /* Drivetrain */
+    // Buttons.controller1_YButton.onTrue(m_sysIDDriveRoutine);
+    Buttons.controller1_minusButton.toggleOnTrue(m_resetFieldOrientedHeading);
+
+    /* Shooter */
+    Buttons.controller1_RightTrigger.whileTrue(m_ShootAtHub);
+
+    /* Intake */
     Buttons.controller1_leftBumper.whileTrue(m_ToggleIntake);
     Buttons.controller1_RightTrigger.whileTrue(m_OscillateIntake);
-    Buttons.controller1_rightBumper.whileTrue(m_OscillateIntake);
 
-    Buttons.controller1_minusButton.onTrue(new InstantCommand( ()->m_robotDrive.resetGyro(), m_robotDrive) );
+    // ==================
+    // Operator Controls
+    // ==================
 
-    //Buttons.controller1_XButton.whileTrue(m_OscillateIntake); TODO reimplement
-    //m_chooser.getSelected();
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // TODO: improve autos
-    return null; //autoCommand;
+    return null; // TODO: add autos
   }
 }

@@ -1,20 +1,12 @@
-package frc.robot.subsystems.drivetrain;
+package frc.robot.subsystems.Drivetrain;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import frc.lib.math.OnboardModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.AnalogEncoder;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.slicelibs.math.OnboardModuleState;
 
 public class SwerveModule {
 
@@ -24,33 +16,28 @@ public class SwerveModule {
     private Rotation2d lastAngle;
     private SwerveModuleState targetState = new SwerveModuleState();
 
-    public SwerveModule(SwerveModuleIO io, int moduleNumber){
+    public SwerveModule(SwerveModuleIO io, int moduleNumber) {
         this.io = io;
-        this.moduleNumber = moduleNumber;        
+        this.moduleNumber = moduleNumber;
         lastAngle = getState().angle;
     }
 
     public void updateInputs() {
         io.updateInputs(inputs);
-        Logger.processInputs("Drivetrain/Module" + Integer.toString(moduleNumber), inputs);
+        Logger.processInputs("Drivetrain/Module" + moduleNumber, inputs);
     }
 
     public void runSetpoint(SwerveModuleState state, boolean isOpenLoop) {
-        /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
         state = OnboardModuleState.optimize(state, getState().angle);
-
         targetState = state;
-
         setAngle(state);
         setSpeed(state, isOpenLoop);
     }
 
-    /** Runs the drive motor of the module with the specified voltage. */
     public void runCharacterization(double volts) {
         io.setDriveVoltage(volts);
     }
 
-    /** Runs the module with the specified duty cycle percent outputs. */
     public void runDutyCycle(double drivePercentOutput, double anglePercentOutput) {
         io.runDriveDutyCycle(drivePercentOutput);
         io.runAngleDutyCycle(anglePercentOutput);
@@ -58,20 +45,18 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-            io.runDriveDutyCycle(desiredState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
-        }
-        else {
+            io.runDriveDutyCycle(desiredState.speedMetersPerSecond / Constants.DriveConstants.MAX_LINEAR_VELOCITY);
+        } else {
             io.setDriveVelocity(desiredState.speedMetersPerSecond);
         }
     }
-    
+
     private void setAngle(SwerveModuleState desiredState) {
-        // Prevent rotating module if speed is less than or equal to 1%. Prevents jittering.
+        // Suppress jitter when nearly stopped
         Rotation2d angle =
-            (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.kDrivetrain.MAX_LINEAR_VELOCITY * 0.01))
+            (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.DriveConstants.MAX_LINEAR_VELOCITY * 0.01))
                 ? lastAngle
                 : desiredState.angle;
-
         io.setAnglePosition(angle.getDegrees());
         lastAngle = angle;
     }
@@ -89,10 +74,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(
-            inputs.driveVelocityMetersPerSec, 
-            getIntegratedAngle()
-        );
+        return new SwerveModuleState(inputs.driveVelocityMetersPerSec, getIntegratedAngle());
     }
 
     public SwerveModuleState getTargetState() {
@@ -100,10 +82,7 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
-            inputs.drivePositionMeters, 
-            getIntegratedAngle()
-        );
+        return new SwerveModulePosition(inputs.drivePositionMeters, getIntegratedAngle());
     }
 
     public double getDriveAcceleration() {
@@ -115,6 +94,6 @@ public class SwerveModule {
     }
 
     public double getDriveOutputCurrent() {
-       return inputs.driveCurrentAmps;
+        return inputs.driveCurrentAmps;
     }
 }

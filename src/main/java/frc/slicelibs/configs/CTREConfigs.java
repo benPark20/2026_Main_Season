@@ -4,6 +4,7 @@
 
 package frc.slicelibs.configs;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import frc.robot.Constants;
@@ -13,26 +14,30 @@ public class CTREConfigs {
 
     public final TalonFXConfiguration m_swerveDriveConfigs = new TalonFXConfiguration();
     public final TalonFXConfiguration m_swerveTurnConfigs = new TalonFXConfiguration();
+    public final CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
     public final TalonFXConfiguration shooterConfigs = new TalonFXConfiguration();
     public final TalonFXConfiguration pivotConfigs = new TalonFXConfiguration();
 
-
     public final TalonFXConfiguration extenderConfigs = new TalonFXConfiguration();
     public final TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
 
-    public final TalonFXConfiguration indexerConfigs  = new TalonFXConfiguration();
+    public final TalonFXConfiguration indexerConfigs = new TalonFXConfiguration();
 
 
-    public CTREConfigs(){
+    public CTREConfigs() {
         configureSwerve();
         configureShooter();
         configureIntake();
         configureIndexer();
     }
-    
+
     private void configureSwerve() {
-        // Swerve Drive Motor Configurations
+        // CANcoder config
+        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.DriveConstants.ABSOLUTE_ENCODER_INVERT;
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
+
+        // Drive motor config
         m_swerveDriveConfigs.Slot0.kP = Constants.DriveConstants.DRIVE_KP;
         m_swerveDriveConfigs.Slot0.kI = Constants.DriveConstants.DRIVE_KI;
         m_swerveDriveConfigs.Slot0.kD = Constants.DriveConstants.DRIVE_KD;
@@ -43,10 +48,12 @@ public class CTREConfigs {
         m_swerveDriveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         m_swerveDriveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        // Swerve Turn Motor Configurations
-        m_swerveTurnConfigs.Slot0.kP = Constants.DriveConstants.DRIVE_KP;
-        m_swerveTurnConfigs.Slot0.kI = Constants.DriveConstants.DRIVE_KI;
-        m_swerveTurnConfigs.Slot0.kD = Constants.DriveConstants.DRIVE_KD;
+        // Turn motor config
+        m_swerveTurnConfigs.Slot0.kP = Constants.DriveConstants.TURN_KP;
+        m_swerveTurnConfigs.Slot0.kI = Constants.DriveConstants.TURN_KI;
+        m_swerveTurnConfigs.Slot0.kD = Constants.DriveConstants.TURN_KD;
+        m_swerveTurnConfigs.Feedback.SensorToMechanismRatio = Constants.DriveConstants.ANGLE_GEAR_RATIO;
+        m_swerveTurnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
         m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimit = Constants.DriveConstants.TURN_STATOR_CURRENT_LIMIT;
         m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimit = Constants.DriveConstants.TURN_SUPPLY_CURRENT_LIMIT;
         m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimitEnable = true;

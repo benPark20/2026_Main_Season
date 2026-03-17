@@ -1,122 +1,126 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.subsystems.drivetrain;
+package frc.robot.subsystems.Drivetrain;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.AnalogEncoder;
-import frc.lib.config.SwerveModuleConstants;
-import frc.lib.math.Conversions;
 import frc.robot.Constants;
+import frc.slicelibs.configs.SwerveModuleConstants;
+import frc.slicelibs.math.Conversions;
 
 public class RealSwerveModuleIO implements SwerveModuleIO {
+
     private final Rotation2d angleOffset;
 
     private final TalonFX driveMotor;
-    private final SparkMax angleMotor;
-
-    private final AnalogEncoder angleEncoder;
-    private final RelativeEncoder integratedAngleEncoder;
+    private final TalonFX turnMotor;
+    private final CANcoder angleEncoder;
 
     private final SimpleMotorFeedforward driveFeedforward;
-    private final SparkClosedLoopController anglePID;
 
-    /* Drive Motor Control Requests */
+    /* Drive control requests */
     private final DutyCycleOut driveDutyCycleRequest = new DutyCycleOut(0);
     private final VoltageOut driveVoltageRequest = new VoltageOut(0);
     private final VelocityVoltage driveVelocityRequest = new VelocityVoltage(0);
 
-    /* Drive Motor Status Signals */
+    /* Turn control request - ContinuousWrap enabled in config */
+    private final PositionVoltage turnPositionRequest = new PositionVoltage(0);
+    private final VoltageOut turnVoltageRequest = new VoltageOut(0);
+
+    /* Drive status signals */
     private final StatusSignal<Angle> drivePositionSignal;
     private final StatusSignal<AngularVelocity> driveVelocitySignal;
     private final StatusSignal<AngularAcceleration> driveAccelerationSignal;
     private final StatusSignal<Voltage> driveAppliedVoltsSignal;
     private final StatusSignal<Current> driveCurrentSignal;
 
+    /* Turn status signals */
+    private final StatusSignal<Angle> turnPositionSignal;
+    private final StatusSignal<AngularVelocity> turnVelocitySignal;
+    private final StatusSignal<Voltage> turnAppliedVoltsSignal;
+    private final StatusSignal<Current> turnCurrentSignal;
+
+    /* CANcoder signal */
+    private final StatusSignal<Angle> cancoderPositionSignal;
+
     public RealSwerveModuleIO(SwerveModuleConstants moduleConstants) {
         this.angleOffset = moduleConstants.angleOffset;
 
-        /* Drive Motor Config */
+        /* Drive motor */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
-        driveMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.swerveDriveFXConfig);
+        driveMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.m_swerveDriveConfigs);
         driveMotor.getConfigurator().setPosition(0);
         driveFeedforward = new SimpleMotorFeedforward(
-            Constants.kDrivetrain.DRIVE_KS, Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA);
+            Constants.DriveConstants.DRIVE_KS, Constants.DriveConstants.DRIVE_KV);
 
-        /* Angle Motor Config */
-        angleMotor = new SparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
-        angleMotor.configure(Constants.REV_CONFIGS.angleSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        integratedAngleEncoder = angleMotor.getEncoder();
-        anglePID = angleMotor.getClosedLoopController();
-        angleMotor.setCANTimeout(200);
+        /* CANcoder */
+        angleEncoder = new CANcoder(moduleConstants.absoluteEncoderID);
+        angleEncoder.getConfigurator().apply(Constants.CTRE_CONFIGS.swerveCANcoderConfig);
+        cancoderPositionSignal = angleEncoder.getAbsolutePosition();
 
-        /* Absolute Encoder Config */
-        angleEncoder = new AnalogEncoder(moduleConstants.absoluteEncoderID, 360, 0);
-        angleEncoder.setInverted(Constants.kDrivetrain.ABSOLUTE_ENCODER_INVERT);
+        /* Turn motor - seed from CANcoder, then apply config */
+        turnMotor = new TalonFX(moduleConstants.angleMotorID);
+        turnMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.m_swerveTurnConfigs);
         resetToAbsolute();
 
-        /* Drive Motor Status Signals */
+        /* Status signals */
         drivePositionSignal = driveMotor.getPosition();
         driveVelocitySignal = driveMotor.getVelocity();
         driveAccelerationSignal = driveMotor.getAcceleration();
         driveAppliedVoltsSignal = driveMotor.getMotorVoltage();
         driveCurrentSignal = driveMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(
-            Constants.kDrivetrain.DRIVE_POSITION_FREQUENCY_HZ, drivePositionSignal);
-        BaseStatusSignal.setUpdateFrequencyForAll(
-            Constants.kDrivetrain.DRIVE_DEFAULT_FREQUENCY_HZ,
-            driveVelocitySignal,
-            driveAccelerationSignal,
-            driveAppliedVoltsSignal,
-            driveCurrentSignal);
-        //driveMotor.optimizeBusUtilization();
+        turnPositionSignal = turnMotor.getPosition();
+        turnVelocitySignal = turnMotor.getVelocity();
+        turnAppliedVoltsSignal = turnMotor.getMotorVoltage();
+        turnCurrentSignal = turnMotor.getSupplyCurrent();
+
+        BaseStatusSignal.setUpdateFrequencyForAll(100,
+            drivePositionSignal, driveVelocitySignal,
+            turnPositionSignal, turnVelocitySignal);
+        BaseStatusSignal.setUpdateFrequencyForAll(50,
+            driveAccelerationSignal, driveAppliedVoltsSignal, driveCurrentSignal,
+            turnAppliedVoltsSignal, turnCurrentSignal);
     }
 
     @Override
     public void updateInputs(SwerveModuleIOInputs inputs) {
         BaseStatusSignal.refreshAll(
-            drivePositionSignal,
-            driveVelocitySignal,
-            driveAccelerationSignal,
-            driveAppliedVoltsSignal,
-            driveCurrentSignal);
+            drivePositionSignal, driveVelocitySignal,
+            driveAccelerationSignal, driveAppliedVoltsSignal, driveCurrentSignal,
+            turnPositionSignal, turnVelocitySignal,
+            turnAppliedVoltsSignal, turnCurrentSignal);
+        cancoderPositionSignal.refresh();
 
         inputs.drivePositionMeters =
-            Conversions.talonToMeters(drivePositionSignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
+            Conversions.talonToMeters(drivePositionSignal.getValueAsDouble(),
+                Constants.DriveConstants.WHEEL_CIRCUMFERENCE, Constants.DriveConstants.DRIVE_GEAR_RATIO);
         inputs.driveVelocityMetersPerSec =
-            Conversions.talonToMPS(driveVelocitySignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
+            Conversions.talonToMPS(driveVelocitySignal.getValueAsDouble(),
+                Constants.DriveConstants.WHEEL_CIRCUMFERENCE, Constants.DriveConstants.DRIVE_GEAR_RATIO);
         inputs.driveAccelerationMetersPerSecSquared =
-            Conversions.talonToMPSSquared(driveAccelerationSignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
+            Conversions.talonToMPSSquared(driveAccelerationSignal.getValueAsDouble(),
+                Constants.DriveConstants.WHEEL_CIRCUMFERENCE, Constants.DriveConstants.DRIVE_GEAR_RATIO);
         inputs.driveAppliedVolts = driveAppliedVoltsSignal.getValueAsDouble();
         inputs.driveCurrentAmps = driveCurrentSignal.getValueAsDouble();
 
         inputs.absoluteAnglePosition =
-            Rotation2d.fromDegrees(angleEncoder.get());
+            Rotation2d.fromRotations(cancoderPositionSignal.getValueAsDouble());
+        // SensorToMechanismRatio is set in config, so motor position is already in mechanism rotations
         inputs.integratedAnglePosition =
-            Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+            Rotation2d.fromRotations(turnPositionSignal.getValueAsDouble());
         inputs.angleVelocityDegreesPerSec =
-            integratedAngleEncoder.getVelocity();
-        inputs.angleAppliedVolts = angleMotor.getAppliedOutput() * angleMotor.getBusVoltage();
-        inputs.angleCurrentAmps = angleMotor.getOutputCurrent();
+            turnVelocitySignal.getValueAsDouble() * 360.0;
+        inputs.angleAppliedVolts = turnAppliedVoltsSignal.getValueAsDouble();
+        inputs.angleCurrentAmps = turnCurrentSignal.getValueAsDouble();
     }
 
     @Override
@@ -126,35 +130,44 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
     }
 
     @Override
-    public void runAngleDutyCycle(double percentOutput) {
-        angleMotor.set(percentOutput);
-    }
-
-    @Override
     public void setDriveVoltage(double volts) {
         driveVoltageRequest.Output = volts;
         driveMotor.setControl(driveVoltageRequest);
     }
 
     @Override
-    public void setDriveVelocity(double velocity) {
-        driveVelocityRequest.Velocity = velocity;
-        driveVelocityRequest.FeedForward = driveFeedforward.calculate(velocity);
+    public void setDriveVelocity(double velocityMPS) {
+        double motorRPS = Conversions.MPSToTalon(
+            velocityMPS, Constants.DriveConstants.WHEEL_CIRCUMFERENCE, Constants.DriveConstants.DRIVE_GEAR_RATIO);
+        driveVelocityRequest.Velocity = motorRPS;
+        driveVelocityRequest.FeedForward = driveFeedforward.calculate(velocityMPS);
         driveMotor.setControl(driveVelocityRequest);
     }
 
     @Override
-    public void setAngleVoltage(double volts) {
-        angleMotor.setVoltage(volts);
+    public void runAngleDutyCycle(double percentOutput) {
+        turnMotor.set(percentOutput);
     }
 
     @Override
-    public void setAnglePosition(double position) {
-        anglePID.setReference(position, ControlType.kPosition);
+    public void setAngleVoltage(double volts) {
+        turnVoltageRequest.Output = volts;
+        turnMotor.setControl(turnVoltageRequest);
+    }
+
+    @Override
+    public void setAnglePosition(double degrees) {
+        // SensorToMechanismRatio applied, so position is in mechanism rotations
+        turnPositionRequest.Position = degrees / 360.0;
+        turnMotor.setControl(turnPositionRequest);
     }
 
     @Override
     public void resetToAbsolute() {
-        integratedAngleEncoder.setPosition(angleEncoder.get() - angleOffset.getDegrees());
+        cancoderPositionSignal.refresh();
+        // Set turn motor position in mechanism rotations (offset subtracted)
+        double absoluteRotations = cancoderPositionSignal.getValueAsDouble() - angleOffset.getRotations();
+        // Multiply by gear ratio because SensorToMechanismRatio divides it back out
+        turnMotor.getConfigurator().setPosition(absoluteRotations * Constants.DriveConstants.ANGLE_GEAR_RATIO);
     }
 }
