@@ -74,9 +74,6 @@ public class CTREConfigs {
         //shooterPID.kV = 510; //TODO tune
 
 
-        var shooterLimits = shooterConfigs.CurrentLimits;
-
-
         var shooterRightPID = shooterRightConfigs.Slot0;
         shooterRightPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
         shooterRightPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;

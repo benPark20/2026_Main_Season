@@ -126,7 +126,7 @@ public final class Constants {
     public static final int RIGHT_SHOOTER_MOTOR_ID = 2;
 
     //TODO: tune PIDs
-    public static final double FLYWHEEL_KP = 0.05;
+    public static final double FLYWHEEL_KP = 0.35;
     public static final double FLYWHEEL_KI = 0.0;
     public static final double FLYWHEEL_KD = 0.0;
 

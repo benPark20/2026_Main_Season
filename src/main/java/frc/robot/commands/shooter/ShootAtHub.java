@@ -29,6 +29,6 @@ public class ShootAtHub extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     //addCommands(new SpinStageOne(indexer, 0.3), new SpinStageTwo(m_Indexer, 0.3), new BasicShoot(m_Shooter));
 
-    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.5)), new SpinStageOne(indexer, 0.35));
+    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.8)), new SpinStageOne(indexer, 0.8));
   }
 }
