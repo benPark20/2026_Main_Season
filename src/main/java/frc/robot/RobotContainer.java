@@ -15,7 +15,7 @@ import frc.robot.commands.Shooter.ShootAtHub;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Drivetrain.DriveSubsystem;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 import java.util.function.ObjIntConsumer;
 
@@ -51,7 +51,7 @@ public class RobotContainer {
   //private final XboxController m_operatorController = Buttons.controller2;
 
   /* Drive Subsystem */
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Drivetrain m_robotDrive = new Drivetrain();
 
   /*  Intake Subsystem & Commands */
   private final Intake m_Intake =  new Intake();

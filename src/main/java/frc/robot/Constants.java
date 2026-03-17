@@ -39,36 +39,22 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(15.4498); //TODO: fine tune measurements
-    // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.1782);  //TODO: fine tune measurements
+    
+    /* Swerve Physics */
+    public static final double TRACK_WIDTH = Units.inchesToMeters(22.0); // TODO: Find track width and wheel base length
+    public static final double WHEEL_BASE = Units.inchesToMeters(23.1782);
+    public static final double DRIVE_BASE_RADIUS = Math.hypot(WHEEL_BASE / 2, TRACK_WIDTH / 2);
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+    public static final double MASS = 65; // TODO: Find mass (kg)
+    public static final double MOMENT_OF_INERTIA = 6; // TODO: Find MOI (kg*m^2)
+    public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.5; // Injection molded TPU Tread
 
-    // Driving Parameters - Note that these are not the maximum capable speeds of
-    // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAngularSpeed = 3 / Math.hypot(kTrackWidth / 2, kWheelBase / 2); // radians per second
-
-    public static final double kWheelRadius = 0.0508; //in Meters
-
-    // Distance between front and back wheels on robot
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // back right
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));  //back left
-
-    // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kRearLeftChassisAngularOffset = Math.PI;
-    public static final double kRearRightChassisAngularOffset = Math.PI / 2;
-
-    //Angular offsets of the wheels
-    public static final Rotation2d kFrontLeftAngularOffset = Rotation2d.fromRotations(0.514);
-    public static final Rotation2d kFrontRightAngularOffset = Rotation2d.fromRotations(0.481);
-    public static final Rotation2d kRearLeftAngularOffset = Rotation2d.fromRotations(0.521);
-    public static final Rotation2d kRearRightAngularOffset = Rotation2d.fromRotations(0.816);
+    public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
+      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
+      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
+      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
+      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* MOTOR IDS */
     public static final int FRONT_LEFT_DRIVE_ID = 17;
@@ -86,6 +72,8 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER_ID = 21;
     public static final int BACK_LEFT_ENCODER_ID = 20;
     public static final int BACK_RIGHT_ENCODER_ID = 22;
+
+    public static final int GYRO_ID = 24;
 
     /* Drivetrain Gear Ratios */
     public static final double DRIVE_GEAR_RATIO = (5.79 / 1.0); // 5.79:1

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Drivetrain.DriveSubsystem;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,7 +20,7 @@ public class ShootAtHub extends Command {
 
   private Shooter m_Shooter;
   private Indexer m_Indexer;
-  private DriveSubsystem m_Drivetrain;
+  private Drivetrain m_Drivetrain;
 
   private enum State {
     PRESHOOT, SHOOTING
