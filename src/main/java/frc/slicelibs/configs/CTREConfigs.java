@@ -6,6 +6,7 @@ package frc.slicelibs.configs;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import frc.robot.Constants;
 
@@ -23,7 +24,7 @@ public class CTREConfigs {
     public final TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
 
     public final TalonFXConfiguration indexerConfigs = new TalonFXConfiguration();
-
+    public final TalonFXConfiguration intakeConfigs = new TalonFXConfiguration();
 
     public CTREConfigs() {
         configureSwerve();
@@ -59,11 +60,15 @@ public class CTREConfigs {
         m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+
+        /*
+
+        WHY IS THIS HERE LOLLLL
+
         //////////////////////////
         /// Shooter Configs ////
         //////////////////////////
 
-        /* Shooter PIDs */
         var shooterPID = shooterConfigs.Slot0;
         shooterPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
         shooterPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
@@ -72,26 +77,27 @@ public class CTREConfigs {
         //shooterPID.kV = 510; //TODO tune
 
 
-        var shooterRightPID = shooterRightConfigs.Slot0;
+        var shooterRightPID = shooterConfigs.Slot0;
         shooterRightPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
         shooterRightPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
         shooterRightPID.kD = Constants.ShooterConstants.FLYWHEEL_KD;
 
-        var shooterRight = shooterRightConfigs.MotorOutput;
+        var shooterRight = shooterConfigs.MotorOutput;
         shooterRight.Inverted = InvertedValue.Clockwise_Positive;
 
         //////////////////////
         /// Intake Configs ///
         //////////////////////
         
-        var intakePID = m_intakeConfigs.Slot0;
-        // TODO change PIDs
+        var intakePID = intakeConfigs.Slot0;
         intakePID.kP = 0.2;
         intakePID.kI = 0;
         intakePID.kD = 0;
 
-        var intakeOutput = m_intakeConfigs.MotorOutput;
+        var intakeOutput = intakeConfigs.MotorOutput;
         intakeOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+        */
 
     }
 

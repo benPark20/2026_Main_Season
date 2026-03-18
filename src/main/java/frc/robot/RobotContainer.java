@@ -102,7 +102,7 @@ public class RobotContainer {
     m_sysIDDriveRoutine         = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
 
     /* Intake */
-    m_ToggleIntake    = new ToggleIntake(m_Intake);
+    m_ToggleIntake    = new ToggleIntake(m_Intake, m_Indexer);
     m_OscillateIntake = new OscillateIntake(m_Intake);
 
     /* Indexer */

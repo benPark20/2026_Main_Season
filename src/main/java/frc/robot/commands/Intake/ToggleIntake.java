@@ -23,8 +23,9 @@ public class ToggleIntake extends Command {
   /**
    * Creates a new intake.
    */
-  public ToggleIntake(Intake intake) {
+  public ToggleIntake(Intake intake, Indexer indexer) {
     m_intake = intake;
+    m_indexer = indexer;
   }
 
   // Called when the command is initially scheduled.

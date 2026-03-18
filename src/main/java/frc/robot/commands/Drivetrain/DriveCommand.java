@@ -39,7 +39,7 @@ public class DriveCommand extends Command {
     public void execute() {
         // Left stick -> translation, right stick X -> rotation
         double[] translation = translationFilter.filter(
-            -m_driverController.getRawAxis(0),  // left stick X (strafe)
+            m_driverController.getRawAxis(0),  // left stick X (strafe)
             -m_driverController.getRawAxis(1)); // left stick Y (forward)
 
         double translationX = translation[0] * Constants.DriveConstants.MAX_LINEAR_VELOCITY;

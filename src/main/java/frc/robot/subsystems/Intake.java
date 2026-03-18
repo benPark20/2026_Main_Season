@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.slicelibs.TalonFXPositionalSubsystem;
 
 @SuppressWarnings("unused")
 
-public class Intake extends frc.slicelibs.TalonFXPositionalSubsystem {
+public class Intake extends TalonFXPositionalSubsystem {
 
   private TalonFX rotationMotor;
 

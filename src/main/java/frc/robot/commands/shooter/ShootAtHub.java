@@ -5,7 +5,12 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.Indexer.SpinStageOne;
+import frc.robot.commands.Indexer.SpinStageTwo;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
@@ -16,7 +21,7 @@ import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 // This method most likely needs to be a ParallelCommandGroup that runs the shooter and drivetrain commands
 
-public class ShootAtHub extends Command {
+public class ShootAtHub extends ParallelCommandGroup {
 
   private Shooter m_Shooter;
   private Indexer m_Indexer;
@@ -36,9 +41,10 @@ public class ShootAtHub extends Command {
     // addCommands(new FooCommand(), new BarCommand());
     //addCommands(new SpinStageOne(indexer, 0.3), new SpinStageTwo(m_Indexer, 0.3), new BasicShoot(m_Shooter));
 
-    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.8)), new SpinStageOne(indexer, 0.8));
+    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.8), new SpinStageOne(indexer, 0.8)));
   }
-
+}
+/*
   @Override
   public void initialize() {
     m_Shooter.spinFlywheels(m_Shooter.getTargetPosition());
@@ -71,4 +77,4 @@ public class ShootAtHub extends Command {
     public void end(boolean interrupted) {
 
     }
-}
+*/

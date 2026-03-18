@@ -32,6 +32,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.StatusSignal.SignalMeasurement;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -74,7 +75,9 @@ public class Drivetrain extends SubsystemBase {
         gyroYawVelocitySignal = m_gyro.getAngularVelocityZWorld();
 
         resetModulesToAbsolute();
-        while (!m_gyro.isConnected()) {}
+        while (!m_gyro.isConnected()) {
+            continue;
+        }
         m_gyro.reset();
 
         m_field2d = new Field2d();
@@ -143,6 +146,11 @@ public class Drivetrain extends SubsystemBase {
 
         Logger.recordOutput("Drivetrain/Current Command",
             getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
+
+        SmartDashboard.putNumber("1 Absolute Encoder", getAbsoluteAngles()[0]);
+        SmartDashboard.putNumber("2 Absolute Encoder", getAbsoluteAngles()[1]);
+        SmartDashboard.putNumber("3 Absolute Encoder", getAbsoluteAngles()[2]);
+        SmartDashboard.putNumber("4 Absolute Encoder", getAbsoluteAngles()[3]);
     }
 
     /**
@@ -235,7 +243,7 @@ public class Drivetrain extends SubsystemBase {
     public double[] getAbsoluteAngles() {
         double[] angles = new double[4];
         for (SwerveModule mod : swerveMods) {
-            angles[mod.moduleNumber] = mod.getAbsoluteAngle().getDegrees();
+            angles[mod.moduleNumber] = mod.getAbsoluteAngle().getRotations();
         }
         return angles;
     }

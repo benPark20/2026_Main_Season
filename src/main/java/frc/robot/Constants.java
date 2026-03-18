@@ -126,22 +126,22 @@ public final class Constants {
     public static final frc.slicelibs.configs.SwerveModuleConstants FRONT_LEFT_MODULE =
         new frc.slicelibs.configs.SwerveModuleConstants(
             FRONT_LEFT_DRIVE_ID, FRONT_LEFT_TURN_ID, FRONT_LEFT_ENCODER_ID,
-            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+            Rotation2d.fromRotations(0.516602)); // TODO: Set real offsets
 
     public static final frc.slicelibs.configs.SwerveModuleConstants FRONT_RIGHT_MODULE =
         new frc.slicelibs.configs.SwerveModuleConstants(
             FRONT_RIGHT_DRIVE_ID, FRONT_RIGHT_TURN_ID, FRONT_RIGHT_ENCODER_ID,
-            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+            Rotation2d.fromRotations(0.479248)); // TODO: Set real offsets
 
     public static final frc.slicelibs.configs.SwerveModuleConstants BACK_RIGHT_MODULE =
         new frc.slicelibs.configs.SwerveModuleConstants(
             BACK_RIGHT_DRIVE_ID, BACK_RIGHT_TURN_ID, BACK_RIGHT_ENCODER_ID,
-            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+            Rotation2d.fromRotations(0.817139)); // TODO: Set real offsets
 
     public static final frc.slicelibs.configs.SwerveModuleConstants BACK_LEFT_MODULE =
         new frc.slicelibs.configs.SwerveModuleConstants(
             BACK_LEFT_DRIVE_ID, BACK_LEFT_TURN_ID, BACK_LEFT_ENCODER_ID,
-            Rotation2d.fromDegrees(0.0)); // TODO: Set real offsets
+            Rotation2d.fromRotations(0.519043)); // TODO: Set real offsets
 
   }
 
