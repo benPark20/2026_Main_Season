@@ -58,6 +58,41 @@ public class CTREConfigs {
         m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimit = Constants.DriveConstants.TURN_SUPPLY_CURRENT_LIMIT;
         m_swerveTurnConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         m_swerveTurnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        //////////////////////////
+        /// Shooter Configs ////
+        //////////////////////////
+
+        /* Shooter PIDs */
+        var shooterPID = shooterConfigs.Slot0;
+        shooterPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
+        shooterPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
+        shooterPID.kD = Constants.ShooterConstants.FLYWHEEL_KD;
+        //shooterPID.kS =
+        //shooterPID.kV = 510; //TODO tune
+
+
+        var shooterRightPID = shooterRightConfigs.Slot0;
+        shooterRightPID.kP = Constants.ShooterConstants.FLYWHEEL_KP;
+        shooterRightPID.kI = Constants.ShooterConstants.FLYWHEEL_KI;
+        shooterRightPID.kD = Constants.ShooterConstants.FLYWHEEL_KD;
+
+        var shooterRight = shooterRightConfigs.MotorOutput;
+        shooterRight.Inverted = InvertedValue.Clockwise_Positive;
+
+        //////////////////////
+        /// Intake Configs ///
+        //////////////////////
+        
+        var intakePID = m_intakeConfigs.Slot0;
+        // TODO change PIDs
+        intakePID.kP = 0.2;
+        intakePID.kI = 0;
+        intakePID.kD = 0;
+
+        var intakeOutput = m_intakeConfigs.MotorOutput;
+        intakeOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
     }
 
     private void configureShooter() {

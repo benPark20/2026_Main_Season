@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants.FullShooterParams;
 import frc.slicelibs.TalonFXPositionalSubsystem;
@@ -46,10 +48,20 @@ public class Shooter extends TalonFXPositionalSubsystem {
     rightShooterMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.shooterConfigs);
   }
 
-  // Set flywheels to a specific speed
-  public void spinFlywheels(double speed) {
-    leftShooterMotor.set(speed);
-    rightShooterMotor.set(speed);
+  public void windDownFlywheels(){
+    leftShooterMotor.set(0);
+    rightShooterMotor.set(0);
+  }
+
+  /**
+   * Sets the flywheels to spin at a certain speed.
+   * @param speed The speed to set (a value between -1.0 and 1.0)
+   */
+  public void spinFlywheels(double velocity){
+    VelocityVoltage velocityRequest = new VelocityVoltage((velocity) * ( 28.0 / 20.0 ) ).withSlot(0).withFeedForward(.1);
+
+    leftShooterMotor.setControl(velocityRequest);
+    rightShooterMotor.setControl(velocityRequest);
   }
 
   // Move shooter hood to a position
@@ -221,8 +233,19 @@ public class Shooter extends TalonFXPositionalSubsystem {
     }
   }
 
+  public double getLeftVelocity(){
+    return leftShooterMotor.getVelocity().getValueAsDouble();
+  }
+
+  public double getRightVelocity(){
+    return rightShooterMotor.getVelocity().getValueAsDouble();
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Left Shoot Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("Right Shoot Velocity", getRightVelocity());
+
     // This method will be called once per scheduler run
   }
 }

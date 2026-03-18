@@ -32,6 +32,11 @@ public class ShootAtHub extends Command {
   public ShootAtHub(Shooter shooter, Indexer indexer) {
     m_Shooter = shooter;
     m_Indexer = indexer;
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    //addCommands(new SpinStageOne(indexer, 0.3), new SpinStageTwo(m_Indexer, 0.3), new BasicShoot(m_Shooter));
+
+    addCommands(new BasicShoot(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new SpinStageTwo(indexer, 0.8)), new SpinStageOne(indexer, 0.8));
   }
 
   @Override
